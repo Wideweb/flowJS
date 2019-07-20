@@ -6,7 +6,8 @@
     "scripts": {
         "build": "webpack",
         "start": "webpack -p --progress && node server.js",
-        "dev": "webpack-dev-server"
+		"dev": "webpack-dev-server",
+		"heroku-prebuild": "npm install --dev"
     },
     "author": "",
     "license": "ISC",
