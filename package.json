@@ -5,11 +5,13 @@
     "main": "index.js",
     "scripts": {
         "build": "webpack",
-        "start": "webpack-dev-server"
+        "start": "./node_modules/webpack/bin/webpack.js -p --progress && node server.js",
+        "dev": "webpack-dev-server"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "express": "^4.17.1",
         "pixi.js": "^5.0.4"
     },
     "devDependencies": {
