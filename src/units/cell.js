@@ -16,7 +16,7 @@ export default class Cell {
         this.graphics.x = x;
         this.graphics.y = y;
 
-        this.position = { x/*: x - UserPosition.x*/, y/*: y - UserPosition.y*/ };
+        this.position = { x, y };
     }
 
     get x() {
@@ -124,7 +124,7 @@ export default class Cell {
         this.position.x += this.speedX;
         this.position.y += this.speedY;
 
-        this.graphics.x = this.position.x;// + UserPosition.x;
-        this.graphics.y = this.position.y;// + UserPosition.y;
+        this.graphics.x = this.position.x;
+        this.graphics.y = this.position.y;
     }
 }

@@ -21,23 +21,7 @@ export default class BackgroundCell extends Cell {
     }
 
     move() {
-        //if (this.position.x + UserPosition.x > window.innerWidth + this.width) {
-        //    this.position.x -= window.innerWidth + this.width * 2;
-        //}
-//
-        //if (this.position.x + UserPosition.x < 0 - this.width) {
-        //    this.position.x += window.innerWidth + this.width * 2;
-        //}
-//
-        //if (this.position.y + UserPosition.y > window.innerHeight + this.width) {
-        //    this.position.y -= window.innerHeight + this.width * 2;
-        //}
-//
-        //if (this.position.y + UserPosition.y < 0 - this.width) {
-        //    this.position.y += window.innerHeight + this.width * 2;
-        //}
-
-        this.graphics.x = this.position.x;// + UserPosition.x;
-        this.graphics.y = this.position.y;// + UserPosition.y;
+        this.graphics.x = this.position.x;
+        this.graphics.y = this.position.y;
     }
 }
