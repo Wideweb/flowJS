@@ -5,13 +5,17 @@ export default class InputManager {
 			pointermove: [],
 		};
 
-		app.stage.on('pointermove', (event) => this.notify('pointermove', { x: event.data.global.x, y: event.data.global.y }));
+		this.innerPointer = { x: 0, y: 0 };
+
+		app.stage.on('pointermove', (event) => { 
+			this.innerPointer.x = event.data.global.x;
+			this.innerPointer.y = event.data.global.y; 
+		});
 	}
 
 	get pointer() {
-		const x = this.app.renderer.plugins.interaction.mouse.global.x - this.app.stage.x;
-		const y = this.app.renderer.plugins.interaction.mouse.global.y - this.app.stage.y;
-		console.log(x, y);
+		const x = this.innerPointer.x - this.app.stage.x;
+		const y = this.innerPointer.y - this.app.stage.y;
 		return { x, y };
 	}
 
