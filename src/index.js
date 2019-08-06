@@ -11,7 +11,7 @@ app.stage.interactive = true;
 // can then insert into the DOM
 document.body.appendChild(app.view);
 
-const inputManager = new InputManager(app);
-let screen = new GameScreen(app.renderer.height, app.renderer.width, inputManager);
+InputManager.instance.app = app;
+let screen = new GameScreen(app.renderer.height, app.renderer.width, InputManager.instance);
 screen.load(app.stage);
 app.ticker.add((time) => screen.update(time));
