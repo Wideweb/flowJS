@@ -8,9 +8,10 @@ const FOOD_NUMBER = 50;
 const BACKGROUND_CELLS = 50;
 
 export default class GameScreen {
-	constructor(height, width, inputManager) {
+	constructor(height, width, screenManager, inputManager) {
 		this.height = height;
 		this.width = width;
+		this.screenManager = screenManager;
 		this.inputManager = inputManager;
 
 		this.snake = null;
@@ -53,7 +54,7 @@ export default class GameScreen {
 		this.snake.unload(container);
 	}
 
-	update() {
+	update(elapsedTime) {
 		this.snake.target = { x: this.inputManager.pointer.x, y: this.inputManager.pointer.y, width: 0, height: 0 };
 
 		this.backgroundCell.forEach(cell => cell.update());

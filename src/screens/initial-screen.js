@@ -1,5 +1,5 @@
 export default class InitialScreen {
-    constructor() {
+    constructor(height, width, screenManager, inputManager) {
         this.delay;
     }
 
@@ -13,10 +13,10 @@ export default class InitialScreen {
 
     update(time) {
         if (gameTime.TotalGameTime.TotalSeconds > Delay && !ScreenManager.Instance.isTransitioning) {
-            ScreenManager.Instance.ChangeScreens("Menu.TitleScreen");
+            ScreenManager.instance.changeScreen("Menu.TitleScreen");
         }
 
         if (InputManager.Instance.keyPressed(Keys.Enter, Keys.Z))
-            ScreenManager.Instance.ChangeScreens("Menu.TitleScreen");
+            ScreenManager.Instance.changeScreen("Menu.TitleScreen");
     }
 }

@@ -1,9 +1,15 @@
+import App from './app';
+
 export default class InputManager {
     constructor() {
         this.handlers = {
             pointermove: [],
         };
-        this.innerPointer = { x: 0, y: 0 };
+		this.innerPointer = { x: 0, y: 0 };
+		App.instance.stage.on('pointermove', (event) => {
+            this.innerPointer.x = event.data.global.x;
+            this.innerPointer.y = event.data.global.y;
+        });
     }
 
     static get instance() {
@@ -14,21 +20,9 @@ export default class InputManager {
         return InputManager._instance;
     }
 
-    set app(value) {
-        this._app = value;
-        this._app.stage.on('pointermove', (event) => {
-            this.innerPointer.x = event.data.global.x;
-            this.innerPointer.y = event.data.global.y;
-        });
-    }
-
-    get app() {
-        return this._app;
-    }
-
     get pointer() {
-        const x = this.innerPointer.x - this.app.stage.x;
-        const y = this.innerPointer.y - this.app.stage.y;
+        const x = this.innerPointer.x - App.instance.stage.x;
+        const y = this.innerPointer.y - App.instance.stage.y;
         return { x, y };
     }
 
