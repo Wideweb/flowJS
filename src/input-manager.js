@@ -7,11 +7,11 @@ export default class InputManager {
     }
 
     static get instance() {
-        if (!ScreenManager._instance) {
-            ScreenManager._instance = new InputManager();
+        if (!InputManager._instance) {
+            InputManager._instance = new InputManager();
         }
 
-        return ScreenManager._instance;
+        return InputManager._instance;
     }
 
     set app(value) {
