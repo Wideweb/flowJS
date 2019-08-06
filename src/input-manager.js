@@ -15,11 +15,15 @@ export default class InputManager {
     }
 
     set app(value) {
-        this.app = value;
-        this.app.stage.on('pointermove', (event) => {
+        this._app = value;
+        this._app.stage.on('pointermove', (event) => {
             this.innerPointer.x = event.data.global.x;
             this.innerPointer.y = event.data.global.y;
         });
+    }
+
+    get app() {
+        return this._app;
     }
 
     get pointer() {
