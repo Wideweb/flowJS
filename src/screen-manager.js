@@ -1,7 +1,6 @@
 import InputManager from './input-manager';
 import InitialScreen from './screens/initial-screen';
 import GameScreen from './screens/game-screen';
-import App from './app';
 
 const SCREENS = {
 	'initial': InitialScreen,
@@ -10,16 +9,13 @@ const SCREENS = {
 
 export default class ScreenManager {
 	constructor() {
+		this.currentScreen = null;
 		this.newScreen = null;
 		this.isTransitioning = false;
-		this.container = null;
-		
-		this.currentScreen = new InitialScreen(
-			App.instance.renderer.height,
-			App.instance.renderer.width,
-			ScreenManager.instance,
-			InputManager.instance,
-		);
+        this.container = null;
+        this.width = 550;
+        this.height = 400;
+        this.container = null;
 	}
 
 	static get instance() {
@@ -30,30 +26,34 @@ export default class ScreenManager {
 		return ScreenManager._instance;
 	}
 
-	changeScreen(screen) {
+	goTo(screen) {
 		if (!this.isTransitioning) {
-			this.newScreen = ScreenFactory.create(screen);
+			this.newScreen = new SCREENS[screen](this.height, this.width, ScreenManager.instance, InputManager.instance);
 			this.isTransitioning = true;
 		}
 	}
 
-	transition(elapsedTime) {
+	transition(gameTime) {
 		if (this.isTransitioning) {
-			this.currentScreen.unload(this.content);
+			this.currentScreen.unload(this.container);
 			this.currentScreen = this.newScreen;
-			this.currentScreen.load(this.content);
+			this.currentScreen.load(this.container);
 			this.isTransitioning = false;
 		}
 	}
 
-	load(content) {
-		this.content = content;
+	load(container) {
+        this.container = container;
+        this.currentScreen = new InitialScreen(this.height, this.width, ScreenManager.instance, InputManager.instance);
+        this.currentScreen.load(container);
 	}
 
-	unload() { }
+	unload(container) { 
+        this.currentScreen.unload(container);
+    }
 
-	update(elapsedTime) {
-		this.currentScreen.update(elapsedTime);
-		this.transition(elapsedTime);
+	update(gameTime) {
+		this.currentScreen.update(gameTime);
+		this.transition(gameTime);
 	}
 }

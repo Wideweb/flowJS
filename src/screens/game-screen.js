@@ -54,7 +54,7 @@ export default class GameScreen {
 		this.snake.unload(container);
 	}
 
-	update(elapsedTime) {
+	update(gameTime) {
 		this.snake.target = { x: this.inputManager.pointer.x, y: this.inputManager.pointer.y, width: 0, height: 0 };
 
 		this.backgroundCell.forEach(cell => cell.update());

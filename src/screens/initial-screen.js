@@ -1,22 +1,34 @@
+import * as PIXI from 'pixi.js';
+
 export default class InitialScreen {
     constructor(height, width, screenManager, inputManager) {
-        this.delay;
+        this.delay = 3000;
+        this.graphics = null;
+
+        this.height = height;
+        this.width = width;
+        this.screenManager = screenManager;
+        this.inputManager = inputManager;
     }
 
     load(container) {
+        const fontSize = this.width / 10;
+        const messageText = 'flOw';
+        const message = new PIXI.Text(messageText, { fontSize: 'Snippet', fontSize, fill: 'white', align: 'center' });
+        message.position.x = this.width / 2 - message.width / 2;
+        message.position.y = this.height / 2 - fontSize / 2;
+        this.graphics = message;
 
+        container.addChild(this.graphics);
     }
 
     unload(container) {
-
+        container.removeChild(this.graphics);
     }
 
-    update(time) {
-        if (gameTime.TotalGameTime.TotalSeconds > Delay && !ScreenManager.Instance.isTransitioning) {
-            ScreenManager.instance.changeScreen("Menu.TitleScreen");
+    update(gameTime) {
+        if (gameTime.total > this.delay && !this.screenManager.isTransitioning) {
+            this.screenManager.goTo('game');
         }
-
-        if (InputManager.Instance.keyPressed(Keys.Enter, Keys.Z))
-            ScreenManager.Instance.changeScreen("Menu.TitleScreen");
     }
 }
