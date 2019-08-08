@@ -14,7 +14,7 @@ export default class InitialScreen {
     load(container) {
         const fontSize = this.width / 10;
         const messageText = 'flOw';
-        const message = new PIXI.Text(messageText, { fontSize: 'Snippet', fontSize, fill: 'white', align: 'center' });
+        const message = new PIXI.Text(messageText, { fontSize, fill: 'white', align: 'center' });
         message.position.x = this.width / 2 - message.width / 2;
         message.position.y = this.height / 2 - fontSize / 2;
         this.graphics = message;
@@ -28,7 +28,7 @@ export default class InitialScreen {
 
     update(gameTime) {
         if (gameTime.total > this.delay && !this.screenManager.isTransitioning) {
-            this.screenManager.goTo('game');
+            this.screenManager.goTo('menu');
         }
     }
 }

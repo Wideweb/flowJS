@@ -1,10 +1,12 @@
 import InputManager from './input-manager';
 import InitialScreen from './screens/initial-screen';
+import MenuScreen from './screens/menu-screen';
 import GameScreen from './screens/game-screen';
 
 const SCREENS = {
 	'initial': InitialScreen,
 	'game': GameScreen,
+	'menu': MenuScreen,
 }
 
 export default class ScreenManager {

@@ -1,24 +1,25 @@
 import MenuManager from '../menu/menu-manager';
 
-export default class InitialScreen {
+export default class MenuScreen {
     constructor(height, width, screenManager, inputManager) {
         this.height = height;
         this.width = width;
         this.screenManager = screenManager;
         this.inputManager = inputManager;
 
-        this.menuManager = new MenuManager('start');
+        this.menuManager = null;
     }
 
     load(container) {
-        menuManager.load(container);
+		this.menuManager = new MenuManager('start', this.height, this.width);
+        this.menuManager.load(container);
     }
 
     unload(container) {
-        menuManager.unload(container);
+        this.menuManager.unload(container);
     }
 
     update(gameTime) {
-        menuManager.update(gameTime);
+        this.menuManager.update(gameTime);
     }
 }
