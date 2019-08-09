@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 
 export default class InitialScreen {
     constructor(height, width, screenManager, inputManager) {
-        this.delay = 3000;
+        this.delay = 2000;
         this.graphics = null;
 
         this.height = height;

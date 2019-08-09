@@ -11,7 +11,7 @@ export default class MenuScreen {
     }
 
     load(container) {
-		this.menuManager = new MenuManager('start', this.height, this.width);
+		this.menuManager = new MenuManager('start', this.height, this.width, this.screenManager);
         this.menuManager.load(container);
     }
 
