@@ -1,23 +1,26 @@
 import HeadCell from './head';
-import Cell from './cell';
-import Line from './line';
+import Cell from '../cell';
+import Line from '../line';
 
 const BODY_CELL_WIDTH = 20;
 const BODY_CELLS = 3;
 
 export default class Snake {
-	constructor(x, y) {
-		this.head = new HeadCell(x, y);
+	constructor(x, y, width) {
+        this.width = width;
+		this.head = new HeadCell(x, y, width);
 		this.body = [];
 		this.lines = [];
 		for (let i = 0; i < BODY_CELLS; i++) {
 			const target = i > 0 ? this.body[i - 1] : this.head;
-			const cell = new Cell(x - BODY_CELL_WIDTH * i, y, BODY_CELL_WIDTH - i / 4, target);
+			const cell = new Cell(x - width * i, y, width - i / 4, target);
 			const line = new Line(target, cell);
 
 			this.body.push(cell);
 			this.lines.push(line);
-		}
+        }
+        
+        this.target = { x, y }
 	}
 
 	get x() {

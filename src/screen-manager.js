@@ -46,7 +46,7 @@ export default class ScreenManager {
 
 	load(container) {
         this.container = container;
-        this.currentScreen = new InitialScreen(this.height, this.width, ScreenManager.instance, InputManager.instance);
+        this.currentScreen = new GameScreen(this.height, this.width, ScreenManager.instance, InputManager.instance);
         this.currentScreen.load(container);
 	}
 

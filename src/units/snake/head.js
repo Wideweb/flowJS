@@ -1,14 +1,13 @@
-import Cell from './cell';
+import Cell from '../cell';
 
 export default class HeadCell extends Cell {
-    constructor(x, y) {
-        super(x, y, 20, null);
+    constructor(x, y, width) {
+        super(x, y, width, null);
 
         this.rotationSpeed = 0.1;
 
         this.closing = false;
         this.opening = false;
-        this.mouthY = 40;
         this.mouthSpeed = 2;
         this.animation = null;
         this.eating = false;
@@ -23,8 +22,8 @@ export default class HeadCell extends Cell {
         this.graphics.endFill();
 
         this.graphics.lineStyle(5, 0xDE3249, 1);
-        this.graphics.moveTo(50, -this.mouthY);
-        this.graphics.bezierCurveTo(-10, -50, -10, 50, 50, this.mouthY);
+        this.graphics.moveTo(5 * this.width / 2, -4 * this.width / 2);
+        this.graphics.bezierCurveTo(-1 * this.width / 2, -5 * this.width / 2, -1 * this.width / 2, 5 * this.width / 2, 5 * this.width / 2, this.width / 2 * 4);
     }
 
     update() {
