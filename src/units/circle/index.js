@@ -10,10 +10,15 @@ export default class Circle {
         this.body = [];
         this.lines = [];
         for (let i = 0; i < BODY_CELLS; i++) {
-            this.body.push(new Cell(x, y, BODY_CELL_WIDTH));
+            const cell = new Cell(x, y, BODY_CELL_WIDTH);
+            cell.onDie = () => this.onHit(cell);
+            this.body.push(cell);
         }
         this.bodyRotation = 0;
         this.target = { x, y };
+        this.attackRange = this.width;
+
+        this.onDie = null;
     }
 
     get width() {
@@ -38,10 +43,26 @@ export default class Circle {
 
     eat() {
         const cell = new Cell(this.x, this.y, BODY_CELL_WIDTH);
+        cell.onDie = () => this.onHit(cell);
         cell.load(this.container);
         this.body.push(cell);
         this.body.forEach(cell => cell.eat());
         this.head.eat();
+    }
+
+    onHit(cell) {
+        cell.unload(this.container);
+        this.body.splice(this.body.indexOf(cell), 1);
+
+        if (this.body.length === 0) {
+            this.die();
+        }
+    }
+
+    die() {
+        if (this.onDie) {
+            this.onDie(this);
+        }
     }
 
     load(container) {

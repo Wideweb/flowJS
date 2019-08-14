@@ -1,8 +1,7 @@
+import JobManager from '../utils/job-manager';
 import Snake from '../units/snake';
 import BackgroundCell from '../units/background';
 import FoodCell from '../units/food';
-import Cell from '../units/cell';
-import Line from '../units/line';
 
 import Circle from '../units/circle';
 
@@ -16,7 +15,7 @@ export default class GameScreen {
         this.screenManager = screenManager;
         this.inputManager = inputManager;
 
-        this.snake = null;
+        this.player = null;
         this.backgroundCell = [];
         this.enemies = [];
         this.food = [];
@@ -39,19 +38,29 @@ export default class GameScreen {
         for (let i = 0; i < 5; i++) {
             const x = Math.random() * this.width * 2 - this.width;
             const y = Math.random() * this.height * 2 - this.height;
-            const cell = new Circle(x, y, 10 + Math.random() * 20);
+            const circle = new Circle(x, y, 10 + Math.random() * 20);
 
-            cell.load(container);
-            this.enemies.push(cell);
+            circle.load(container);
+            this.enemies.push(circle);
+
+            circle.onDie = () => {
+                circle.unload(container);
+                this.enemies.splice(this.enemies.indexOf(circle), 1)
+            };
         }
 
         for (let i = 0; i < 5; i++) {
             const x = Math.random() * this.width * 2 - this.width;
             const y = Math.random() * this.height * 2 - this.height;
-            const cell = new Snake(x, y, 10 + Math.random() * 20);
+            const snake = new Snake(x, y, 10 + Math.random() * 20);
 
-            cell.load(container);
-            this.enemies.push(cell);
+            snake.load(container);
+            this.enemies.push(snake);
+
+            snake.onDie = () => {
+                snake.unload(container);
+                this.enemies.splice(this.enemies.indexOf(snake), 1)
+            };
         }
 
         for (let i = 0; i < BACKGROUND_CELLS; i++) {
@@ -61,14 +70,31 @@ export default class GameScreen {
 
             cell.load(container);
             this.food.push(cell);
+            cell.onDie = () => {
+                cell.unload(container);
+                this.food.splice(this.food.indexOf(cell), 1)
+            };
         }
 
-        this.snake = new Snake(this.width / 2, this.height / 2, 20);
-        this.snake.load(container);
+        this.player = new Snake(this.width / 2, this.height / 2, 20);
+        this.player.load(container);
 
         this.container = container;
 
-        this.eatable = [...this.food, ...this.enemies.map(e => e.body)];
+        this.eatable = [...this.food, ...this.enemies.map(e => e.body).flat()];
+
+        [this.player].forEach((unit) => {
+            JobManager.instance.addJob(this.eatable, (item, index) => {
+                if (!unit.eating && Math.abs(item.x - unit.x) + Math.abs(item.y - unit.y) < unit.attackRange) {
+                    item.die();
+                    unit.eat(item);
+                    this.eatable.splice(index, 1);
+                    console.log(this.eatable.length);
+                    return true;
+                }
+                return false;
+            }, true);
+        })
     }
 
     unload(container) {
@@ -77,45 +103,18 @@ export default class GameScreen {
         this.backgroundCell.forEach(cell => cell.unload(container));
         this.enemies.forEach(cell => cell.unload(container));
         this.food.forEach(cell => cell.unload(container));
-        this.snake.unload(container);
+        this.player.unload(container);
     }
 
     update(gameTime) {
-        this.snake.target = { x: this.inputManager.pointer.x || 0, y: this.inputManager.pointer.y || 0, width: 0, height: 0 };
+        this.player.target = { x: this.inputManager.pointer.x || 0, y: this.inputManager.pointer.y || 0, width: 0, height: 0 };
 
         this.backgroundCell.forEach(cell => cell.update(gameTime));
         this.enemies.forEach(cell => cell.update(gameTime));
         this.food.forEach(cell => cell.update(gameTime));
-        this.snake.update(gameTime);
+        this.player.update(gameTime);
 
-        this.container.x = -this.snake.x + this.width / 2;
-        this.container.y = -this.snake.y + this.height / 2;
-
-        if (this.snake.eating) {
-            return;
-        }
-
-        for (let i = 0; i < this.food.length; i++) {
-            if (Math.abs(this.food[i].x - this.snake.x) + Math.abs(this.food[i].y - this.snake.y) < 80) {
-                this.food[i].unload(this.container);
-                this.food.splice(i, 1);
-                this.snake.eat();
-
-                //let lastCell = this.snake.body[this.snake.body.length - 1];
-
-                //const x = lastCell.x;
-                //const y = lastCell.y;
-                //const cell = new Cell(x, y, 20 - this.snake.body.length / 4, lastCell);
-                //const line = new Line(lastCell, cell)
-
-                //this.snake.body.push(cell);
-                //this.snake.lines.push(line);
-
-                //line.load(this.container);
-                //cell.load(this.container);
-
-                return;
-            }
-        }
+        this.container.x = -this.player.x + this.width / 2;
+        this.container.y = -this.player.y + this.height / 2;
     }
 }

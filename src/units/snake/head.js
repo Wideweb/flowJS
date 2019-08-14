@@ -11,6 +11,7 @@ export default class HeadCell extends Cell {
         this.mouthSpeed = 2;
         this.animation = null;
         this.eating = false;
+        this.mouthY = this.width / 2 * 4
     }
 
     draw() {
@@ -22,8 +23,8 @@ export default class HeadCell extends Cell {
         this.graphics.endFill();
 
         this.graphics.lineStyle(5, 0xDE3249, 1);
-        this.graphics.moveTo(5 * this.width / 2, -4 * this.width / 2);
-        this.graphics.bezierCurveTo(-1 * this.width / 2, -5 * this.width / 2, -1 * this.width / 2, 5 * this.width / 2, 5 * this.width / 2, this.width / 2 * 4);
+        this.graphics.moveTo(5 * this.width / 2, -1 * this.mouthY);
+        this.graphics.bezierCurveTo(-1 * this.width / 2, -5 * this.width / 2, -1 * this.width / 2, 5 * this.width / 2, 5 * this.width / 2, this.mouthY);
     }
 
     update() {
@@ -40,7 +41,7 @@ export default class HeadCell extends Cell {
     }
 
     animateClose() {
-        if (this.mouthY >= 10) {
+        if (this.mouthY >= this.width / 2) {
             this.mouthY -= this.mouthSpeed;
         } else {
             this.animation = this.animateOpen;
@@ -48,7 +49,7 @@ export default class HeadCell extends Cell {
     }
 
     animateOpen() {
-        if (this.mouthY <= 40) {
+        if (this.mouthY <= this.width / 2 * 4) {
             this.mouthY += this.mouthSpeed;
         } else {
             this.eating = false;

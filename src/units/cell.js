@@ -17,6 +17,7 @@ export default class Cell {
         this.graphics.y = y;
 
         this.position = { x, y };
+        this.onDie = null;
     }
 
     get x() {
@@ -48,6 +49,12 @@ export default class Cell {
         const dx = this.target.x - this.x;
 
         return Math.atan2(dy, dx);
+    }
+
+    die() {
+        if (this.onDie) {
+            this.onDie(this);
+        }
     }
 
     load(container) {
