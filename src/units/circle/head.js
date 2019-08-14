@@ -11,7 +11,7 @@ export default class HeadCell {
         this.opening = false;
         this.animation = null;
         this.eating = false;
-        this.with = width;
+        this.width = width;
         this.eatingTime = 600;
         this.eatingTimeElapsed = 0;
         this.target = null;
@@ -20,7 +20,7 @@ export default class HeadCell {
         this.x = x;
         this.y = y;
 
-        this.indend = this.with / 10;
+        this.indend = this.width / 10;
         this.jawsRotationSpeed = 0.03;
         this.jawsLineWidth = 3;
     }
@@ -65,7 +65,7 @@ export default class HeadCell {
 
         const angleStep = Math.PI * 2 / 3;
         const angle = Math.PI / 6;
-        const triangleWidth = this.with / 3 * 2;
+        const triangleWidth = this.width / 3 * 2;
 
         for (let i = 0; i < 3; i++) {
             let point1X = Math.cos(angleStep * i) * this.indend;
@@ -85,7 +85,7 @@ export default class HeadCell {
         }
 
         this.graphics.lineStyle(this.jawsLineWidth, 0xDE3249, 1);
-        this.graphics.drawCircle(0, 0, this.with);
+        this.graphics.drawCircle(0, 0, this.width);
 
         this.graphics.x = 10;
         this.graphics.y = 10;

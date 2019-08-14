@@ -32,9 +32,9 @@ export default class MenuManager {
         this.menu.update(gameTime);
     }
 
-    _onMenuItemSelected(type, link) {
+    _onMenuItemSelected(type, link, data) {
         if (type === 'screen') {
-            this.screenManager.goTo(link);
+            this.screenManager.goTo(link, data);
         }
     }
 }

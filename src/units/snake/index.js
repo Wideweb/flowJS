@@ -22,7 +22,6 @@ export default class Snake {
         }
 
         this.target = { x, y };
-        this.food = [];
         this.attackRange = this.width * 4;
 
         this.onDie = null;

@@ -14,10 +14,10 @@ export default class ScreenManager {
 		this.currentScreen = null;
 		this.newScreen = null;
 		this.isTransitioning = false;
-        this.container = null;
-        this.width = 550;
-        this.height = 400;
-        this.container = null;
+		this.container = null;
+		this.width = 550;
+		this.height = 400;
+		this.container = null;
 	}
 
 	static get instance() {
@@ -28,8 +28,9 @@ export default class ScreenManager {
 		return ScreenManager._instance;
 	}
 
-	goTo(screen) {
+	goTo(screen, data) {
 		if (!this.isTransitioning) {
+			this.data = data;
 			this.newScreen = new SCREENS[screen](this.height, this.width, ScreenManager.instance, InputManager.instance);
 			this.isTransitioning = true;
 		}
@@ -45,14 +46,15 @@ export default class ScreenManager {
 	}
 
 	load(container) {
-        this.container = container;
-        this.currentScreen = new GameScreen(this.height, this.width, ScreenManager.instance, InputManager.instance);
-        this.currentScreen.load(container);
+		this.container = container;
+		this.data = {};
+		this.currentScreen = new InitialScreen(this.height, this.width, ScreenManager.instance, InputManager.instance);
+		this.currentScreen.load(container);
 	}
 
-	unload(container) { 
-        this.currentScreen.unload(container);
-    }
+	unload(container) {
+		this.currentScreen.unload(container);
+	}
 
 	update(gameTime) {
 		this.currentScreen.update(gameTime);

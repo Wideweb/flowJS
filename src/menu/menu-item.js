@@ -10,7 +10,8 @@ export default class Menu {
         this.text = config.text;
         this.type = config.type;
         this.link = config.link;
-        this.onSelect = onSelect;
+		this.onSelect = onSelect;
+		this.data = config.data;
 		
 		this.message = null;
 		this.graphics = null;
@@ -27,7 +28,7 @@ export default class Menu {
         graphics.drawRect(this.x, this.y, this.width, this.height);
         graphics.hitArea = new PIXI.Rectangle(this.x, this.y, this.width, this.height);
         graphics.interactive = true;
-        graphics.pointerdown = () => this.onSelect(this.type, this.link);
+        graphics.pointerdown = () => this.onSelect(this.type, this.link, this.data);
         this.graphics = graphics;
 		
 		container.addChild(this.message);

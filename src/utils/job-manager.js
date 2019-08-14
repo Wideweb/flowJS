@@ -18,7 +18,7 @@ export default class JobManager {
     }
 
     addJob(data, action, cycled) {
-        const job = { data: data.concat(), action, cycled, initData: data };
+        const job = { data: data, action, cycled, index: 0 };
         this.queue.push(job);
         this.run();
     }
@@ -37,9 +37,8 @@ export default class JobManager {
         do {
             if (this.processJob(this.queue[0])) {
                 const completedJob = this.queue.shift();
-                completedJob.data = completedJob.initData.concat();
+                completedJob.index = 0;
                 this.queue.push(completedJob);
-                console.log('COMPLETED');
             }
         } while (this.queue.length > 0 && this.endtime > +new Date())
 
@@ -55,16 +54,14 @@ export default class JobManager {
             return true;
         }
 
-        let i = 0;
         do {
-            if (job.action(job.data[i], i)) {
+            if (job.action(job.data[job.index], job.index)) {
                 return true;
             }
-            i++;
-        } while (i < job.data.length && this.endtime > +new Date())
+            job.index++;
+        } while (job.index < job.data.length && this.endtime > +new Date())
 
-        if (i < job.data.length) {
-            job.data.splice(0, i);
+        if (job.index < job.data.length) {
             return false;
         }
 
