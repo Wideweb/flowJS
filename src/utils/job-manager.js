@@ -4,9 +4,9 @@ export default class JobManager {
         this.running = false;
 
         // chunk processing time
-        this.maxtime = 20;
+        this.maxtime = 10;
         // delay between processes
-        this.delay = 200;
+        this.delay = 100;
     }
 
     static get instance() {

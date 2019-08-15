@@ -5,8 +5,8 @@ import BackgroundCell from '../units/background';
 import FoodCell from '../units/food';
 import Circle from '../units/circle';
 
-const FOOD_NUMBER = 50;
-const BACKGROUND_CELLS = 50;
+const FOOD_NUMBER = 25;
+const BACKGROUND_CELLS = 25;
 
 export default class GameScreen {
 	constructor(height, width, screenManager, inputManager) {
@@ -31,15 +31,15 @@ export default class GameScreen {
 		this.parent.addChild(this.container);
 
 		for (let i = 0; i < FOOD_NUMBER; i++) {
-			const x = Math.random() * this.width * 4 - this.width * 2;
-			const y = Math.random() * this.height * 4 - this.height * 2;
+			const x = Math.random() * this.width * 2 - this.width;
+			const y = Math.random() * this.height * 2 - this.height;
 			const cell = new BackgroundCell(x, y, Math.random() * 300, Math.random() / 10 + 0.05);
 
 			cell.load(this.container);
 			this.backgroundCell.push(cell);
 		}
 
-		for (let i = 0; i < 5; i++) {
+		for (let i = 0; i < 3; i++) {
 			const x = Math.random() * this.width * 2 - this.width;
 			const y = Math.random() * this.height * 2 - this.height;
 			const circle = new Circle(x, y, 10 + Math.random() * 20);
@@ -53,7 +53,7 @@ export default class GameScreen {
 			};
 		}
 
-		for (let i = 0; i < 5; i++) {
+		for (let i = 0; i < 3; i++) {
 			const x = Math.random() * this.width * 2 - this.width;
 			const y = Math.random() * this.height * 2 - this.height;
 			const snake = new Snake(x, y, 10 + Math.random() * 20);
@@ -68,8 +68,8 @@ export default class GameScreen {
 		}
 
 		for (let i = 0; i < BACKGROUND_CELLS; i++) {
-			const x = Math.random() * this.width * 4 - this.width * 2;
-			const y = Math.random() * this.height * 4 - this.height * 2;
+			const x = Math.random() * this.width * 2 - this.width;
+			const y = Math.random() * this.height * 2 - this.height;
 			const cell = new FoodCell(x, y, 10);
 
 			cell.load(this.container);
