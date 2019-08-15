@@ -1,7 +1,9 @@
 import * as PIXI from 'pixi.js';
+import SequenceNumber from '../utils/sequence-number';
 
 export default class Cell {
     constructor(x, y, width, target) {
+        this.id = SequenceNumber.next();
         this.target = target;
         this.graphics = new PIXI.Graphics();
 

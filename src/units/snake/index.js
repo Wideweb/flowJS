@@ -9,6 +9,7 @@ export default class Snake {
         this.width = width;
         this.head = new HeadCell(x, y, width);
         this.body = [];
+        this.bodyMap = {};
         this.lines = [];
         for (let i = 0; i < BODY_CELLS; i++) {
             const target = i > 0 ? this.body[i - 1] : this.head;
@@ -18,6 +19,7 @@ export default class Snake {
             cell.onDie = () => this.onHit(cell);
 
             this.body.push(cell);
+            this.bodyMap[cell.id] = cell;
             this.lines.push(line);
         }
 
@@ -54,10 +56,13 @@ export default class Snake {
         cell.onDie = () => this.onHit(cell);
 
         this.body.push(cell);
+        this.bodyMap[cell.id] = cell;
         this.lines.push(line);
 
         line.load(this.container);
         cell.load(this.container);
+
+        return cell;
     }
 
     onHit(cell) {
@@ -76,6 +81,7 @@ export default class Snake {
         line.unload(this.container);
 
         this.body.splice(index, 1);
+        delete this.bodyMap[cell.id];
         this.lines.splice(index, 1);
         
         if (this.body.length === 0) {
