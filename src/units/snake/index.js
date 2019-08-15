@@ -5,112 +5,117 @@ import Line from '../line';
 const BODY_CELLS = 3;
 
 export default class Snake {
-    constructor(x, y, width) {
-        this.width = width;
-        this.head = new HeadCell(x, y, width);
-        this.body = [];
-        this.bodyMap = {};
-        this.lines = [];
-        for (let i = 0; i < BODY_CELLS; i++) {
-            const target = i > 0 ? this.body[i - 1] : this.head;
-            const cell = new Cell(x - width * i, y, width - i / 4, target);
-            const line = new Line(target, cell);
-            
-            cell.onDie = () => this.onHit(cell);
+	constructor(x, y, width) {
+		this.width = width;
+		this.head = new HeadCell(x, y, width);
+		this.body = [];
+		this.bodyMap = {};
+		this.lines = [];
+		for (let i = 0; i < BODY_CELLS; i++) {
+			const target = i > 0 ? this.body[i - 1] : this.head;
+			const cell = new Cell(x - width * i, y, width - i / 4, target);
+			const line = new Line(target, cell);
 
-            this.body.push(cell);
-            this.bodyMap[cell.id] = cell;
-            this.lines.push(line);
-        }
+			cell.onDie = () => this.onHit(cell);
 
-        this.target = { x, y };
-        this.attackRange = this.width * 4;
+			this.body.push(cell);
+			this.bodyMap[cell.id] = cell;
+			this.lines.push(line);
+		}
 
-        this.onDie = null;
-    }
+		this.target = { x, y };
+		this.attackRange = this.width * 4;
 
-    get x() {
-        return this.head.x;
-    }
+		this.onDie = null;
+		this.onAttacked = null;
+	}
 
-    get y() {
-        return this.head.y;
-    }
+	get x() {
+		return this.head.x;
+	}
 
-    set target(value) {
-        this.head.target = value;
-    }
+	get y() {
+		return this.head.y;
+	}
 
-    get eating() {
-        return this.head.eating;
-    }
+	set target(value) {
+		this.head.target = value;
+	}
 
-    eat(item) {
-        this.head.eat();
-        let lastCell = this.body[this.body.length - 1];
-        const x = lastCell.x;
-        const y = lastCell.y;
-        const cell = new Cell(x, y, this.width - this.body.length / 4, lastCell);
-        const line = new Line(lastCell, cell)
+	get eating() {
+		return this.head.eating;
+	}
 
-        cell.onDie = () => this.onHit(cell);
+	eat(item) {
+		this.head.eat();
+		let lastCell = this.body[this.body.length - 1];
+		const x = lastCell.x;
+		const y = lastCell.y;
+		const cell = new Cell(x, y, this.width - this.body.length / 4, lastCell);
+		const line = new Line(lastCell, cell)
 
-        this.body.push(cell);
-        this.bodyMap[cell.id] = cell;
-        this.lines.push(line);
+		cell.onDie = () => this.onHit(cell);
 
-        line.load(this.container);
-        cell.load(this.container);
+		this.body.push(cell);
+		this.bodyMap[cell.id] = cell;
+		this.lines.push(line);
 
-        return cell;
-    }
+		line.load(this.container);
+		cell.load(this.container);
 
-    onHit(cell) {
-        const index = this.body.indexOf(cell);
+		return cell;
+	}
 
-        const prevCell = this.body[index - 1] || this.head;
-        const nextCell = this.body[index + 1];
-        const line = this.lines[index];
-        const nextLine = this.lines[index + 1];
+	onHit(cell) {
+		const index = this.body.indexOf(cell);
 
-        if (nextCell) {
-            nextLine.from = nextCell.target = prevCell;
-        }
+		const prevCell = this.body[index - 1] || this.head;
+		const nextCell = this.body[index + 1];
+		const line = this.lines[index];
+		const nextLine = this.lines[index + 1];
 
-        cell.unload(this.container);
-        line.unload(this.container);
+		if (nextCell) {
+			nextLine.from = nextCell.target = prevCell;
+		}
 
-        this.body.splice(index, 1);
-        delete this.bodyMap[cell.id];
-        this.lines.splice(index, 1);
-        
-        if (this.body.length === 0) {
-            this.die();
-        }
-    }
+		cell.unload(this.container);
+		line.unload(this.container);
 
-    die() {
-        if (this.onDie) {
-            this.onDie(this);
-        }
-    }
+		this.body.splice(index, 1);
+		delete this.bodyMap[cell.id];
+		this.lines.splice(index, 1);
 
-    load(container) {
-        this.lines.forEach(line => line.load(container));
-        this.body.forEach(cell => cell.load(container));
-        this.head.load(container);
-        this.container = container;
-    }
+		if (this.onAttacked) {
+			this.onAttacked();
+		}
 
-    unload(container) {
-        this.lines.forEach(line => line.unload(container));
-        this.body.forEach(cell => cell.unload(container));
-        this.head.unload(container);
-    }
+		if (this.body.length === 0) {
+			this.die();
+		}
+	}
 
-    update() {
-        this.body.forEach(cell => cell.update());
-        this.lines.forEach(line => line.update());
-        this.head.update();
-    }
+	die() {
+		if (this.onDie) {
+			this.onDie(this);
+		}
+	}
+
+	load(container) {
+		this.lines.forEach(line => line.load(container));
+		this.body.forEach(cell => cell.load(container));
+		this.head.load(container);
+		this.container = container;
+	}
+
+	unload(container) {
+		this.lines.forEach(line => line.unload(container));
+		this.body.forEach(cell => cell.unload(container));
+		this.head.unload(container);
+	}
+
+	update() {
+		this.body.forEach(cell => cell.update());
+		this.lines.forEach(line => line.update());
+		this.head.update();
+	}
 }

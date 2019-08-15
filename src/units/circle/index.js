@@ -19,7 +19,8 @@ export default class Circle {
         this.bodyRotation = 0;
         this.target = { x, y };
 
-        this.onDie = null;
+		this.onDie = null;
+		this.onAttacked = null;
         this.width = width;
         this.updateHead();
     }
@@ -62,7 +63,11 @@ export default class Circle {
         cell.unload(this.container);
         this.body.splice(this.body.indexOf(cell), 1);
         delete this.bodyMap[cell.id];
-        this.updateHead();
+		this.updateHead();
+		
+		if (this.onAttacked) {
+			this.onAttacked();
+		}
 
         if (this.body.length === 0) {
             this.die();
