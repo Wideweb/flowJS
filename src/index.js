@@ -1,5 +1,15 @@
 import App from './app';
 
-// The application will create a canvas element
-// then insert into the DOM
+
+document.head.innerHTML += `
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145856924-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-145856924-1');
+    </script>
+`;
 document.body.appendChild(App.instance.view);
