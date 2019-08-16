@@ -37,8 +37,10 @@ export default class JobManager {
         do {
             if (this.processJob(this.queue[0])) {
                 const completedJob = this.queue.shift();
-                completedJob.index = 0;
-                this.queue.push(completedJob);
+                if (completedJob.cycled()) {
+                    completedJob.index = 0;
+                    this.queue.push(completedJob);
+                }
             }
         } while (this.queue.length > 0 && this.endtime > +new Date())
 
@@ -50,7 +52,7 @@ export default class JobManager {
     }
 
     processJob(job) {
-        if (job.length === 0) {
+        if (job.length === 0 || job.index >= job.data.length) {
             return true;
         }
 

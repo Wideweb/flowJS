@@ -52,10 +52,10 @@ export default class GameScreen {
 
             cell.load(this.container);
             this.food.push(cell);
-            cell.onDie = () => {
+            cell.onDie.push(() => {
                 cell.unload(this.container);
                 this.food.splice(this.food.indexOf(cell), 1)
-            };
+            });
         }
 
         for (let i = 0; i < 3; i++) {
@@ -67,10 +67,10 @@ export default class GameScreen {
             this.enemies.push(circle);
             this.unitControllers.push(new UnitController(circle, this.mapWidth, this.mapHeight, this));
 
-            circle.onDie = () => {
+            circle.onDie.push(() => {
                 circle.unload(this.container);
                 this.enemies.splice(this.enemies.indexOf(circle), 1)
-            };
+            });
         }
 
         for (let i = 0; i < 3; i++) {
@@ -82,10 +82,10 @@ export default class GameScreen {
             this.enemies.push(snake);
             this.unitControllers.push(new UnitController(snake, this.mapWidth, this.mapHeight, this));
 
-            snake.onDie = () => {
+            snake.onDie.push(() => {
                 snake.unload(this.container);
                 this.enemies.splice(this.enemies.indexOf(snake), 1)
-            };
+            });
         }
 
         if (this.screenManager.data.hero === 1) {
@@ -95,7 +95,7 @@ export default class GameScreen {
         }
 
         this.player.onAttacked = () => this.onPlayerAttacked();
-        this.player.onDie = () => this.screenManager.goTo('menu');
+        this.player.onDie.push(() => this.screenManager.goTo('menu'));
         this.player.load(this.container);
 
         const units = [this.player, ...this.enemies];
@@ -107,14 +107,14 @@ export default class GameScreen {
                         return false;
                     }
 
-                    item.die();
                     eat.push(unit.eat(item));
                     eat.splice(index, 1);
+                    item.die();
 
                     return true;
                 }
                 return false;
-            }, true);
+            }, () => !unit.dead);
         });
 
         let gradTexture = Graphics.createRadialGradTexture('rgba(255, 0, 0, 0.0)', 'rgba(255, 0, 0, 0.5)');
@@ -124,9 +124,9 @@ export default class GameScreen {
         this.alarmSprite.alpha = 0;
         this.parent.addChild(this.alarmSprite);
 
-        JobManager.instance.addJob(this.enemies, this.checkItemPosition.bind(this), true);
-        JobManager.instance.addJob(this.food, this.checkItemPosition.bind(this), true);
-        JobManager.instance.addJob(this.backgroundCell, this.checkItemPosition.bind(this), true);
+        JobManager.instance.addJob(this.enemies, this.checkItemPosition.bind(this), () => true);
+        JobManager.instance.addJob(this.food, this.checkItemPosition.bind(this), () => true);
+        JobManager.instance.addJob(this.backgroundCell, this.checkItemPosition.bind(this), () => true);
     }
 
     getNewPosition() {

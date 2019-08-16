@@ -12,14 +12,14 @@ export default class Circle {
         this.lines = [];
         for (let i = 0; i < BODY_CELLS; i++) {
             const cell = new Cell(x, y, BODY_CELL_WIDTH);
-            cell.onDie = () => this.onHit(cell);
+            cell.onDie.push(() => this.onHit(cell));
             this.body.push(cell);
             this.bodyMap[cell.id] = cell;
         }
         this.bodyRotation = 0;
         this.target = { x, y };
 
-        this.onDie = null;
+        this.onDie = [];
         this.onAttacked = null;
         this.width = width;
         this.updateHead();
@@ -66,7 +66,7 @@ export default class Circle {
 
     eat() {
         const cell = new Cell(this.x, this.y, BODY_CELL_WIDTH);
-        cell.onDie = () => this.onHit(cell);
+        cell.onDie.push(() => this.onHit(cell));
         cell.load(this.container);
         this.body.push(cell);
         this.body.forEach(cell => cell.eat());
@@ -98,9 +98,7 @@ export default class Circle {
     }
 
     die() {
-        if (this.onDie) {
-            this.onDie(this);
-        }
+        this.onDie.forEach(h => h(this));
     }
 
     load(container) {

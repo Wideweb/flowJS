@@ -16,7 +16,7 @@ export default class Snake {
             const cell = new Cell(x - width * i, y, width - i / 4, target);
             const line = new Line(target, cell);
 
-            cell.onDie = () => this.onHit(cell);
+            cell.onDie.push(() => this.onHit(cell));
 
             this.body.push(cell);
             this.bodyMap[cell.id] = cell;
@@ -26,10 +26,11 @@ export default class Snake {
         this.target = { x, y };
         this.attackRange = this.width * 4;
 
-        this.onDie = null;
+        this.onDie = [];
         this.onAttacked = null;
         this.speed = this.initSpeed = 5;
         this.a = 0.03;
+        this.dead = false;
     }
 
     set speed(value) {
@@ -75,7 +76,7 @@ export default class Snake {
         const cell = new Cell(x, y, this.width - this.body.length / 4, lastCell);
         const line = new Line(lastCell, cell)
 
-        cell.onDie = () => this.onHit(cell);
+        cell.onDie.push(() => this.onHit(cell));
 
         this.body.push(cell);
         this.bodyMap[cell.id] = cell;
@@ -116,9 +117,8 @@ export default class Snake {
     }
 
     die() {
-        if (this.onDie) {
-            this.onDie(this);
-        }
+        this.onDie.forEach(h => h(this));
+        this.dead = true;
     }
 
     load(container) {

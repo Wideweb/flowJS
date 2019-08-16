@@ -14,6 +14,10 @@ export default class UnitController {
     }
 
     update(gameTime) {
+        if (this.unit.dead) {
+            return;
+        }
+
         this.changeDirectionTimeElapsed += gameTime.elapsed;
 
         if (this.changeDirectionTimeElapsed >= this.changeDirectionTime) {
@@ -22,6 +26,7 @@ export default class UnitController {
             const units = [this.gameScreen.player, ...this.gameScreen.enemies, ...this.gameScreen.food];
             const target = units[Formulas.getRandomArbitraryInt(0, units.length - 1)];
 
+            target.onDie.push(() => this.unit.target = this.unit);
             this.unit.target = target;
         }
     }

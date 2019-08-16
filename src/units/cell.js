@@ -19,7 +19,7 @@ export default class Cell {
         this.graphics.y = y;
 
         this.position = { x, y };
-        this.onDie = null;
+        this.onDie = [];
     }
 
     get x() {
@@ -54,9 +54,7 @@ export default class Cell {
     }
 
     die() {
-        if (this.onDie) {
-            this.onDie(this);
-        }
+        this.onDie.forEach(h => h(this));
     }
 
     load(container) {
