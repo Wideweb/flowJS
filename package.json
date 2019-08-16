@@ -21,5 +21,7 @@
         "webpack-cli": "^3.3.6",
         "webpack-dev-server": "^3.7.2"
     },
-    "devDependencies": {}
+    "devDependencies": {
+        "html-webpack-template": "^6.2.0"
+    }
 }
