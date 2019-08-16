@@ -19,6 +19,12 @@ export default class App {
                     total: App.time += App._instance.ticker.elapsedMS
                 })
             );
+
+            const message = new PIXI.Text("© Alkevich Entertainment", { fontSize: 15, fill: 'white' });
+            message.alpha = 0.7;
+            message.position.x = window.innerWidth - message.width - 30;
+            message.position.y = window.innerHeight - 50;
+            App._instance.stage.addChild(message);
         }
 
         return App._instance;
