@@ -173,9 +173,5 @@ export default class GameScreen {
 				this.attacked = false;
 			}
 		}
-
-		if (!this.attacked && this.alarmSprite.alpha > 0) {
-			this.alarmSprite.alpha -= 0.05;
-		}
 	}
 }
