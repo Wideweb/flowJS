@@ -1,83 +1,11 @@
-class Vector {
-	public x: number = 0;
-	public y: number = 0;
+import IFormationPattern from "./base/formation-pattern";
+import SlotAssignment from "./base/slot-assignment";
+import Static from "../mathematics/static";
 
-	add(v: Vector) {
-		this.x += v.x;
-		this.y += v.y;
-	}
-
-	sub(v: Vector) {
-		this.x -= v.x;
-		this.y -= v.y;
-	}
-
-	div(n: number) {
-		this.x /= n;
-		this.y /= n;
-	}
-}
-
-class Static {
-	position: Vector;
-	orientation: number;
-}
-
-class Character {
-	setTarget(location: Static) {
-
-	}
-}
-
-interface FormationPattern {
-	supportsSlots(number: number): Boolean;
-	getSlotLocation(slotNumber: number): Static;
-	getDriftOffset(assignments: Array<SlotAssignment>): Static;
-}
-
-class CirclePattern implements FormationPattern {
-	private numberOfSlots: number;
-	private characterRadius: number;
-
-	getDriftOffset(assignments: Array<SlotAssignment>) {
-		const center = new Static();
-		for (let i = 0; i < assignments.length; i++) {
-			const location = this.getSlotLocation(i);
-			center.position.add(location.position);
-			center.orientation += location.orientation;
-		}
-
-		center.position.div(assignments.length);
-		center.orientation /= assignments.length;
-		return center;
-	}
-
-	getSlotLocation(slotNumber: number): Static {
-		const angleAroundCircle = slotNumber / this.numberOfSlots * Math.PI * 2;
-		const radius = this.characterRadius / Math.sin(Math.PI / this.numberOfSlots);
-
-		const location = new Static();
-		location.position.x = radius * Math.cos(angleAroundCircle);
-		location.position.y = radius * Math.sin(angleAroundCircle);
-
-		location.orientation = angleAroundCircle;
-		return location;
-	}
-
-	supportsSlots(number: number): Boolean {
-		return true;
-	}
-}
-
-class SlotAssignment {
-	public character: Character;
-	public slotNumber: number;
-}
-
-class FormationManager {
+export default class FormationManager {
 
 	private slotAssignments: Array<SlotAssignment> = [];
-	private pattern: FormationPattern = null;
+	private pattern: IFormationPattern = null;
 	private driftOffset: Static;
 
 	updateSlotAssignments() {
@@ -96,6 +24,7 @@ class FormationManager {
 			slotAssignment.character = character;
 			this.slotAssignments.push(slotAssignment);
 
+			this.pattern.setSlotsNumber(occupiedSlots + 1);
 			this.updateSlotAssignments();
 			return true;
 		}
@@ -122,6 +51,4 @@ class FormationManager {
 			this.slotAssignments[i].character.setTarget(location);
 		}
 	}
-
-
 }

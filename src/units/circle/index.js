@@ -12,17 +12,26 @@ export default class Circle {
         this.lines = [];
         for (let i = 0; i < BODY_CELLS; i++) {
             const cell = new Cell(x, y, BODY_CELL_WIDTH);
-            cell.onDie = () => this.onHit(cell);
+            cell.onDie.push(() => this.onHit(cell));
             this.body.push(cell);
             this.bodyMap[cell.id] = cell;
         }
         this.bodyRotation = 0;
         this.target = { x, y };
 
-		this.onDie = null;
-		this.onAttacked = null;
+        this.onDie = [];
+        this.onAttacked = null;
         this.width = width;
         this.updateHead();
+        this.speed = this.initSpeed = 5;
+    }
+
+    set speed(value) {
+        this.head.speed = value;
+    }
+
+    get speed() {
+        return this.head.speed;
     }
 
     get attackRange() {
@@ -33,8 +42,18 @@ export default class Circle {
         return this.head.x;
     }
 
+    set x(value) {
+        this.head.x = value;
+        this.body.forEach(c => c.x = value);
+    }
+
     get y() {
         return this.head.y;
+    }
+
+    set y(value) {
+        this.head.y = value;
+        this.body.forEach(c => c.y = value);
     }
 
     set target(value) {
@@ -47,7 +66,7 @@ export default class Circle {
 
     eat() {
         const cell = new Cell(this.x, this.y, BODY_CELL_WIDTH);
-        cell.onDie = () => this.onHit(cell);
+        cell.onDie.push(() => this.onHit(cell));
         cell.load(this.container);
         this.body.push(cell);
         this.body.forEach(cell => cell.eat());
@@ -63,11 +82,11 @@ export default class Circle {
         cell.unload(this.container);
         this.body.splice(this.body.indexOf(cell), 1);
         delete this.bodyMap[cell.id];
-		this.updateHead();
-		
-		if (this.onAttacked) {
-			this.onAttacked();
-		}
+        this.updateHead();
+
+        if (this.onAttacked) {
+            this.onAttacked();
+        }
 
         if (this.body.length === 0) {
             this.die();
@@ -79,9 +98,7 @@ export default class Circle {
     }
 
     die() {
-        if (this.onDie) {
-            this.onDie(this);
-        }
+        this.onDie.forEach(h => h(this));
     }
 
     load(container) {
@@ -106,5 +123,9 @@ export default class Circle {
             cell.update(gameTime);
         });
         this.head.update(gameTime);
+
+        if (this.speed > this.initSpeed) {
+            this.speed -= 0.05;
+        }
     }
 }

@@ -19,23 +19,23 @@ export default class Cell {
         this.graphics.y = y;
 
         this.position = { x, y };
-        this.onDie = null;
+        this.onDie = [];
     }
 
     get x() {
-        return this.graphics.x;
+        return this.position.x;
     }
 
     get y() {
-        return this.graphics.y;
+        return this.position.y;
     }
 
     set x(value) {
-        this.graphics.x = value;
+        this.position.x = value;
     }
 
     set y(value) {
-        return this.graphics.y = value;
+        return this.position.y = value;
     }
 
     set rotation(value) {
@@ -54,9 +54,7 @@ export default class Cell {
     }
 
     die() {
-        if (this.onDie) {
-            this.onDie(this);
-        }
+        this.onDie.forEach(h => h(this));
     }
 
     load(container) {
@@ -102,19 +100,19 @@ export default class Cell {
         const moveX = Math.cos(this.graphics.rotation) * this.a;
         const moveY = Math.sin(this.graphics.rotation) * this.a;
 
-        if (moveX > 0 && this.speedX < 1.5) {
+        if (moveX > 0 && this.speedX < this.speed / 3) {
             this.speedX += moveX;
         }
 
-        if (moveX < 0 && this.speedX > -1.5) {
+        if (moveX < 0 && this.speedX > -1 * this.speed / 3) {
             this.speedX += moveX;
         }
 
-        if (moveY > 0 && this.speedY < 1.5) {
+        if (moveY > 0 && this.speedY < this.speed / 3) {
             this.speedY += moveY;
         }
 
-        if (moveY < 0 && this.speedY > -1.5) {
+        if (moveY < 0 && this.speedY > -1 * this.speed / 3) {
             this.speedY += moveY;
         }
 

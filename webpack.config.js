@@ -8,7 +8,13 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
-            title: 'Pixi.js Demo'
+            inject: false,
+            template: require('html-webpack-template'),
+            title: 'flOw',
+            googleAnalytics: {
+                trackingId: 'UA-145856924-1',
+                pageViewOnLoad: true,
+            },
         }),
         new CopyPlugin([
             { from: 'src/assets', to: 'assets' },
