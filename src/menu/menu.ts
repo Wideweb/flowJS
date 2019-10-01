@@ -1,9 +1,10 @@
+import { Container } from 'pixi.js';
 import MenuItem from './menu-item';
 import { MenuConfig } from './menu.config';
 import Vector2D from '../mathematics/vector';
-import { Observable, merge } from 'rxjs';
-import { Subject } from 'rxjs';
+import { Observable, merge, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { IAppTime } from '../app';
 
 export default class Menu {
 
@@ -18,7 +19,7 @@ export default class Menu {
         private width: number,
     ) { }
 
-    load(container) {
+    load(container: Container) {
         const itemsGap = 10;
         const itemWidth = 400;
         let itemHeight = 100;
@@ -44,12 +45,12 @@ export default class Menu {
             .pipe(takeUntil(this.unload$));
     }
 
-    unload(container) {
+    unload(container: Container) {
         this.unload$.next(true);
         this.unload$.complete();
         this.items.forEach(item => item.unload(container));
     }
 
-    update(gameTime) {
+    update(gameTime: IAppTime) {
     }
 }

@@ -1,10 +1,11 @@
 import Menu from './menu';
-import { MENUS } from './menu.config';
+import { MENUS, MenuLinkType } from './menu.config';
 import ScreenManager from '../screen-manager';
 import { Container } from 'pixi.js';
 import { IAppTime } from '../app';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import MenuItem from './menu-item';
 
 export default class MenuManager {
     
@@ -24,12 +25,12 @@ export default class MenuManager {
     goTo(menuId: string): void {
         this.menu.unload(this.container);
         this.menuId = menuId;
-        this.menu = new Menu(MENUS[this.menuId], this.height, this.width);
+        this.menu = new Menu(MENUS.get(this.menuId), this.height, this.width);
         this.menu.load(this.container);
     }
 
     load(container: Container): void {
-        this.menu = new Menu(MENUS[this.menuId], this.height, this.width);
+        this.menu = new Menu(MENUS.get(this.menuId), this.height, this.width);
         this.menu.load(container);
 
         this.unload$ = new Subject<Boolean>();
@@ -37,7 +38,7 @@ export default class MenuManager {
             .pipe(
                 takeUntil(this.unload$)
             )
-            .subscribe(this._onMenuItemSelected.bind(this));
+            .subscribe(item => this.onMenuItemSelected(item));
 
         this.container = container;
     }
@@ -52,9 +53,9 @@ export default class MenuManager {
         this.menu.update(gameTime);
     }
 
-    _onMenuItemSelected(type, link, data): void {
-        if (type === 'screen') {
-            this.screenManager.goTo(link, data);
+    private onMenuItemSelected(item: MenuItem): void {
+        if (item.type === MenuLinkType.Screen) {
+            this.screenManager.goTo(item.link, item.data);
         }
     }
 }
