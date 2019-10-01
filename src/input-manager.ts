@@ -23,14 +23,12 @@ export default class InputManager {
 			this.addEvent(POINTER_DOWN_EVENT, observer);
 			this.addEvent(POINTER_MOVE_EVENT, observer);
 		});
-
-		this.on$ = new Observable<InputEvent>();
 	}
 
 	private addEvent(evntType, observer) {
 		App.instance.stage.on(evntType, (event) => {
-			this.innerPointer.x = event.data.global.x;
-			this.innerPointer.y = event.data.global.y;
+			//this.innerPointer.x = event.data.global.x;
+			//this.innerPointer.y = event.data.global.y;
 
 			observer.next(new InputEvent(
 				evntType,

@@ -1,5 +1,5 @@
-import * as PIXI from 'pixi.js';
 import ScreenManager from './screen-manager';
+import { Application, Text } from 'pixi.js';
 
 export class IAppTime {
 	elapsed: number;
@@ -8,12 +8,12 @@ export class IAppTime {
 
 export default class App {
 
-	static _instance: any;
+	static _instance: Application;
 	static time: number;
 
 	static get instance() {
 		if (!App._instance) {
-			App._instance = new PIXI.Application({ width: window.innerWidth - 16, height: window.innerHeight - 20, backgroundColor: 0x560001 });
+			App._instance = new Application({ width: window.innerWidth - 16, height: window.innerHeight - 20, backgroundColor: 0x560001 });
 			App._instance.stage.interactive = true;
 			App._instance.renderer.autoResize = true;
 
@@ -29,7 +29,7 @@ export default class App {
 				})
 			);
 
-			const message = new PIXI.Text("© Alkevich Entertainment", { fontSize: 15, fill: 'white' });
+			const message = new Text("© Alkevich Entertainment", { fontSize: 15, fill: 'white' });
 			message.alpha = 0.7;
 			message.position.x = window.innerWidth - message.width - 30;
 			message.position.y = window.innerHeight - 50;
