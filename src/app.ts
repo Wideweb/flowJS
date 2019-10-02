@@ -1,5 +1,5 @@
 import ScreenManager from './screen-manager';
-import { Application, Text } from 'pixi.js';
+import { Application, Text, Rectangle } from 'pixi.js';
 
 export class IAppTime {
 	elapsed: number;
@@ -14,8 +14,15 @@ export default class App {
 	static get instance() {
 		if (!App._instance) {
 			App._instance = new Application({ width: window.innerWidth - 16, height: window.innerHeight - 20, backgroundColor: 0x560001 });
+			App._instance.stage.hitArea = new Rectangle(
+				0,
+				0,
+				App._instance.renderer.width / App._instance.renderer.resolution,
+				App._instance.renderer.height / App._instance.renderer.resolution
+			);
 			App._instance.stage.interactive = true;
 			App._instance.renderer.autoResize = true;
+
 
 			ScreenManager.instance.width = App._instance.renderer.width;
 			ScreenManager.instance.height = App._instance.renderer.height;

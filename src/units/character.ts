@@ -1,44 +1,46 @@
-import Static from "../mathematics/static";
-import { IAppTime } from "../app";
-import { Graphics, Container } from "pixi.js";
+import Static from '../mathematics/static';
+import { IAppTime } from '../app';
+import { Graphics, Container } from 'pixi.js';
+import Vector2D from '../mathematics/vector';
 
 export default class Character {
 
 	private graphics: Graphics;
 	private container: Container;
 	private location: Static;
-	private targetLocation: Static;
+	private targetPosition: Vector2D;
 
-	constructor() {
-		this.graphics = new Graphics();
-		this.container = new Container();
-		this.location = new Static();
-		
-		this.container.addChild(this.graphics);
-	}
-
-	setTarget(location: Static) {
-		this.targetLocation = location;
+	setTarget(position: Vector2D) {
+		this.targetPosition = position;
 	}
 
 	draw() {
-        this.graphics.clear();
-        this.graphics.lineStyle(0);
-        this.graphics.beginFill(0xDE3249, 1);
-        this.graphics.drawCircle(0, 0, 10);
-        this.graphics.endFill();
-    }
-
-	load(container: any): void {
-        container.addChild(this.container);
+		this.graphics.clear();
+		this.graphics.lineStyle(0);
+		this.graphics.beginFill(0xDE3249, 1);
+		this.graphics.drawCircle(this.location.position.x, this.location.position.y, 10);
+		this.graphics.endFill();
 	}
 
-	unload(container: any): void {
-		container.removeChild(this.container);
+	load(parent: any): void {
+		this.graphics = new Graphics();
+		this.container = new Container();
+		this.location = new Static();
+		this.container.addChild(this.graphics);
+		parent.addChild(this.container);
+	}
+
+	unload(parent: any): void {
+		parent.removeChild(this.container);
+		this.container.removeChild(this.graphics);
 	}
 
 	update(gameTime: IAppTime): void {
-		this.location = this.targetLocation;
+		this.draw();
+
+		if (this.targetPosition !== undefined) {
+			this.location.position = this.targetPosition;
+		}
 
 		this.container.x = this.location.position.x;
 		this.container.y = this.location.position.y;

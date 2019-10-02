@@ -13,7 +13,7 @@ export class MenuItemConfig {
 }
 
 export class MenuConfig {
-	public items: Array<MenuItemConfig>
+	public items: Array<MenuItemConfig> = [];
 
 	constructor(public id: string) { }
 
@@ -24,7 +24,7 @@ export class MenuConfig {
 }
 
 const startMenu = new MenuConfig('start')
-	.addItem(new MenuItemConfig('Start Game', MenuLinkType.Screen, 'dev'))
+	.addItem(new MenuItemConfig('Start Game', MenuLinkType.Screen, 'game'))
 
 export const MENUS = new Map<string, MenuConfig>()
 	.set(startMenu.id, startMenu);

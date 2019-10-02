@@ -1,9 +1,10 @@
-import { Observable } from 'rxjs';
+import { Observable, merge, fromEvent } from 'rxjs';
 import App from './app';
 import Vector2D from './mathematics/vector';
+import { map } from 'rxjs/operators';
 
-export const POINTER_DOWN_EVENT = 'pointerdown';
-export const POINTER_MOVE_EVENT = 'pointermove';
+export const POINTER_DOWN_EVENT: string = 'pointerdown';
+export const POINTER_MOVE_EVENT: string = 'pointermove';
 
 export class InputEvent {
 	constructor(public type: string, public payload: Vector2D) { }
@@ -19,22 +20,16 @@ export default class InputManager {
 	constructor() {
 		this.innerPointer = new Vector2D();
 
-		this.on$ = new Observable<InputEvent>(observer => {
-			this.addEvent(POINTER_DOWN_EVENT, observer);
-			this.addEvent(POINTER_MOVE_EVENT, observer);
-		});
-	}
-
-	private addEvent(evntType, observer) {
-		App.instance.stage.on(evntType, (event) => {
-			//this.innerPointer.x = event.data.global.x;
-			//this.innerPointer.y = event.data.global.y;
-
-			observer.next(new InputEvent(
-				evntType,
-				this.pointer,
-			));
-		});
+		this.on$ = merge(
+			fromEvent(App.instance.stage, POINTER_DOWN_EVENT),
+			fromEvent(App.instance.stage, POINTER_MOVE_EVENT)
+		).pipe(
+			map((event: any) => {
+				this.innerPointer.x = event.data.global.x;
+				this.innerPointer.y = event.data.global.y;
+				return new InputEvent(event.type, this.pointer);
+			})
+		);
 	}
 
 	static get instance() {

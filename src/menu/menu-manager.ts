@@ -1,5 +1,5 @@
 import Menu from './menu';
-import { MENUS, MenuLinkType } from './menu.config';
+import { MENUS, MenuLinkType, MenuConfig } from './menu.config';
 import ScreenManager from '../screen-manager';
 import { Container } from 'pixi.js';
 import { IAppTime } from '../app';
@@ -8,54 +8,51 @@ import { takeUntil } from 'rxjs/operators';
 import MenuItem from './menu-item';
 
 export default class MenuManager {
-    
-    private menu: Menu;
-    private container: Container;
-    private unload$: Subject<Boolean>;
-    
-    constructor(
-        private menuId: string, 
-        private height: number, 
-        private width: number, 
-        private screenManager: ScreenManager) {
-        this.menu = null;
-        this.container = null;
-    }
 
-    goTo(menuId: string): void {
-        this.menu.unload(this.container);
-        this.menuId = menuId;
-        this.menu = new Menu(MENUS.get(this.menuId), this.height, this.width);
-        this.menu.load(this.container);
-    }
+	private menu: Menu;
+	private container: Container;
+	private unload$: Subject<Boolean>;
 
-    load(container: Container): void {
-        this.menu = new Menu(MENUS.get(this.menuId), this.height, this.width);
-        this.menu.load(container);
+	constructor(
+		private menuId: string,
+		private height: number,
+		private width: number,
+		private screenManager: ScreenManager) { }
 
-        this.unload$ = new Subject<Boolean>();
-        this.menu.select$
-            .pipe(
-                takeUntil(this.unload$)
-            )
-            .subscribe(item => this.onMenuItemSelected(item));
+	goTo(menuId: string): void {
+		this.menu.unload(this.container);
+		this.menuId = menuId;
+		this.menu = new Menu(MENUS.get(this.menuId) as MenuConfig, this.height, this.width);
+		this.menu.load(this.container);
+	}
 
-        this.container = container;
-    }
+	load(container: Container): void {
+		this.menu = new Menu(MENUS.get(this.menuId) as MenuConfig, this.height, this.width);
+		this.menu.load(container);
 
-    unload(container: Container): void {
-        this.unload$.next(true);
-        this.unload$.complete();
-        this.menu.unload(container);
-    }
+		this.unload$ = new Subject<Boolean>();
+		this.menu.select$
+			.pipe(
+				takeUntil(this.unload$)
+			)
+			.subscribe(item => this.onMenuItemSelected(item));
 
-    update(gameTime: IAppTime): void {
-        this.menu.update(gameTime);
-    }
+		this.container = container;
+	}
 
-    private onMenuItemSelected(item: MenuItem): void {
-        if (item.type === MenuLinkType.Screen) {
-            this.screenManager.goTo(item.link, item.data);
-        }
-    }
+	unload(container: Container): void {
+		this.unload$.next(true);
+		this.unload$.complete();
+		this.menu.unload(container);
+	}
+
+	update(gameTime: IAppTime): void {
+		this.menu.update(gameTime);
+	}
+
+	private onMenuItemSelected(item: MenuItem): void {
+		if (item.type === MenuLinkType.Screen) {
+			this.screenManager.goTo(item.link, item.data);
+		}
+	}
 }

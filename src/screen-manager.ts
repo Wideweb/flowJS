@@ -1,16 +1,24 @@
+import { Container } from 'pixi.js';
 import InputManager from './input-manager';
 import InitialScreen from './screens/initial-screen';
 import MenuScreen from './screens/menu-screen';
-import GameScreen from './screens/game-screen';
 import BaseScreen from './screens/base-screen';
-import DevScreen from './screens/dev-screen';
+import GameScreen from './screens/game-screen';
 import { IAppTime } from './app';
 
-const SCREENS = {
-	'initial': InitialScreen,
-	'game': GameScreen,
-	'menu': MenuScreen,
-	'dev': DevScreen,
+class ScreenFactory {
+	static create(type: string, height: number, width: number): BaseScreen {
+		switch (type) {
+			case 'initial':
+				return new InitialScreen(height, width, ScreenManager.instance, InputManager.instance);
+			case 'menu':
+				return new MenuScreen(height, width, ScreenManager.instance, InputManager.instance);
+			case 'game':
+				return new GameScreen(height, width, ScreenManager.instance, InputManager.instance);
+		}
+
+		return new InitialScreen(height, width, ScreenManager.instance, InputManager.instance);;
+	}
 }
 
 export default class ScreenManager {
@@ -18,10 +26,10 @@ export default class ScreenManager {
 	public data: any;
 	public width: number = 550;
 	public height: number = 400;
+	public isTransitioning: boolean;
 
 	private currentScreen: BaseScreen;
 	private newScreen: BaseScreen;
-	private isTransitioning: boolean;
 	private container: any;
 
 	private static _instance: ScreenManager;
@@ -34,10 +42,10 @@ export default class ScreenManager {
 		return ScreenManager._instance;
 	}
 
-	goTo(screen: string, data: any): void {
+	goTo(screen: string, data?: any): void {
 		if (!this.isTransitioning) {
 			this.data = data;
-			this.newScreen = new SCREENS[screen](this.height, this.width, ScreenManager.instance, InputManager.instance);
+			this.newScreen = ScreenFactory.create(screen, this.height, this.width);
 			this.isTransitioning = true;
 		}
 	}
@@ -51,14 +59,14 @@ export default class ScreenManager {
 		}
 	}
 
-	load(container): void {
+	load(container: Container): void {
 		this.container = container;
 		this.data = {};
-		this.currentScreen = new InitialScreen(this.height, this.width, ScreenManager.instance, InputManager.instance);
+		this.currentScreen = ScreenFactory.create('initial', this.height, this.width);
 		this.currentScreen.load(container);
 	}
 
-	unload(container): void {
+	unload(container: Container): void {
 		this.currentScreen.unload(container);
 	}
 
