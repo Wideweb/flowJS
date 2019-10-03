@@ -11,7 +11,10 @@ export default class GameScreen extends BaseScreen {
 	private controllers: Array<BasePlayerController> = [];
 
 	load(parent: any): void {
-		this.container = new Container();
+        this.container = new Container();
+        
+        this.container.x = 300;
+        this.container.y = 300;
 
 		const userPlayer = new Player();
 		userPlayer.load(this.container);

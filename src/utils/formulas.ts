@@ -1,9 +1,9 @@
 export default class Formulas {
-    static getRandomArbitraryInt(min, max) {
+    static getRandomArbitraryInt(min: number, max: number): number {
         return Math.floor(Math.random() * (max - min)) + min;
     }
 
-    static getRandomArbitrary(min, max) {
+    static getRandomArbitrary(min: number, max: number): number {
         return Math.random() * (max - min) + min;
     }
 }

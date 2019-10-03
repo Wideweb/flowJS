@@ -5,51 +5,55 @@ import Character from "../units/character";
 
 export default class FormationManager {
 
-	private slotAssignments: Array<SlotAssignment> = [];
-	private pattern: IFormationPattern;
-	private driftOffset: Static;
+    private slotAssignments: Array<SlotAssignment> = [];
+    private pattern: IFormationPattern;
+    private driftOffset: Static;
 
-	updateSlotAssignments(): void {
-		for (let i = 0; i < this.slotAssignments.length; i++) {
-			this.slotAssignments[i].slotNumber = i;
-		}
+    setPattern(pattern: IFormationPattern) {
+        this.pattern = pattern;
+    }
 
-		this.driftOffset = this.pattern.getDriftOffset(this.slotAssignments);
-	}
+    updateSlotAssignments(): void {
+        for (let i = 0; i < this.slotAssignments.length; i++) {
+            this.slotAssignments[i].slotNumber = i;
+        }
 
-	addCharacter(character: Character): boolean {
-		const occupiedSlots = this.slotAssignments.length;
+        this.driftOffset = this.pattern.getDriftOffset(this.slotAssignments);
+    }
 
-		if (this.pattern.supportsSlots(occupiedSlots + 1)) {
-			const slotAssignment = new SlotAssignment();
-			slotAssignment.character = character;
-			this.slotAssignments.push(slotAssignment);
+    addCharacter(character: Character): boolean {
+        const occupiedSlots = this.slotAssignments.length;
 
-			this.pattern.setSlotsNumber(occupiedSlots + 1);
-			this.updateSlotAssignments();
-			return true;
-		}
+        if (this.pattern.supportsSlots(occupiedSlots + 1)) {
+            const slotAssignment = new SlotAssignment();
+            slotAssignment.character = character;
+            this.slotAssignments.push(slotAssignment);
 
-		return false;
-	}
+            this.pattern.setSlotsNumber(occupiedSlots + 1);
+            this.updateSlotAssignments();
+            return true;
+        }
 
-	removeCharacter(character: Character): void {
-		const slotIndex = this.slotAssignments.findIndex(x => x.character === character);
-		this.slotAssignments.splice(slotIndex, 1);
-		this.updateSlotAssignments();
-	}
+        return false;
+    }
 
-	updateSlots(): void {
-		for (let i = 0; i < this.slotAssignments.length; i++) {
-			const relativeLocation = this.pattern.getSlotLocation(i);
-			const location = new Static();
-			location.position = relativeLocation.position;
-			location.orientation = relativeLocation.orientation;
+    removeCharacter(character: Character): void {
+        const slotIndex = this.slotAssignments.findIndex(x => x.character === character);
+        this.slotAssignments.splice(slotIndex, 1);
+        this.updateSlotAssignments();
+    }
 
-			location.position.sub(this.driftOffset.position);
-			location.orientation -= this.driftOffset.orientation;
+    updateSlots(): void {
+        for (let i = 0; i < this.slotAssignments.length; i++) {
+            const relativeLocation = this.pattern.getSlotLocation(i);
+            const location = new Static();
+            location.position = relativeLocation.position;
+            location.orientation = relativeLocation.orientation;
 
-			this.slotAssignments[i].character.setTarget(location.position);
-		}
-	}
+            location.position.sub(this.driftOffset.position);
+            location.orientation -= this.driftOffset.orientation;
+
+            this.slotAssignments[i].character.setTarget(location.position);
+        }
+    }
 }

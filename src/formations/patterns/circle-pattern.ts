@@ -4,7 +4,7 @@ import SlotAssignment from "../base/slot-assignment";
 
 export default class CirclePattern implements IFormationPattern {
 	private numberOfSlots: number;
-	private characterRadius: number;
+	private characterRadius: number = 10;
 
 	setSlotsNumber(number: number): void {
 		this.numberOfSlots = number;
@@ -25,7 +25,7 @@ export default class CirclePattern implements IFormationPattern {
 
 	getSlotLocation(slotNumber: number): Static {
 		const angleAroundCircle = slotNumber / this.numberOfSlots * Math.PI * 2;
-		const radius = this.characterRadius / Math.sin(Math.PI / this.numberOfSlots);
+		const radius = this.characterRadius * 2 / Math.sin(Math.PI * 2 / this.numberOfSlots);
 
 		const location = new Static();
 		location.position.x = radius * Math.cos(angleAroundCircle);

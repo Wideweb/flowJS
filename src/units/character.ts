@@ -2,6 +2,7 @@ import Static from '../mathematics/static';
 import { IAppTime } from '../app';
 import { Graphics, Container } from 'pixi.js';
 import Vector2D from '../mathematics/vector';
+import Formulas from '../utils/formulas';
 
 export default class Character {
 
@@ -25,7 +26,9 @@ export default class Character {
 	load(parent: any): void {
 		this.graphics = new Graphics();
 		this.container = new Container();
-		this.location = new Static();
+        this.location = new Static();
+        this.location.position.x = Formulas.getRandomArbitrary(-300, 300);
+        this.location.position.y = Formulas.getRandomArbitrary(-300, 300);
 		this.container.addChild(this.graphics);
 		parent.addChild(this.container);
 	}
@@ -38,8 +41,12 @@ export default class Character {
 	update(gameTime: IAppTime): void {
 		this.draw();
 
-		if (this.targetPosition !== undefined) {
-			this.location.position = this.targetPosition;
+		if (this.targetPosition !== undefined && this.targetPosition.sub(this.location.position).distance() > 1) {
+            const d = this.targetPosition.sub(this.location.position);
+            const angle = Math.atan2(d.y, d.x);
+
+            this.location.position.x += Math.cos(angle);
+            this.location.position.y += Math.sin(angle);
 		}
 
 		this.container.x = this.location.position.x;
