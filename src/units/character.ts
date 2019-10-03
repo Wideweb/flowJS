@@ -18,7 +18,7 @@ export default class Character {
 		this.graphics.clear();
 		this.graphics.lineStyle(0);
 		this.graphics.beginFill(0xDE3249, 1);
-		this.graphics.drawCircle(this.location.position.x, this.location.position.y, 10);
+		this.graphics.drawCircle(0, 0, 10);
 		this.graphics.endFill();
 	}
 
