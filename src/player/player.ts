@@ -2,15 +2,15 @@ import { Container } from 'pixi.js';
 import Character from "../units/character";
 import FormationManager from "../formations/formations-manager";
 import { IAppTime } from "../app";
-import Vector2D from '../mathematics/vector';
 import CirclePattern from '../formations/patterns/circle-pattern';
+import GameObject from '../game-object';
 
 export default class Player {
 
     characters: Array<Character> = [];
     formationManager: FormationManager = new FormationManager();;
 
-    setTarget(position: Vector2D) {
+    setTarget(position: GameObject) {
         this.characters.forEach(character => character.setTarget(position));
     }
 

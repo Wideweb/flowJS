@@ -13,8 +13,8 @@ export default class GameScreen extends BaseScreen {
 	load(parent: any): void {
         this.container = new Container();
         
-        this.container.x = 300;
-        this.container.y = 300;
+        this.container.x = 0;
+        this.container.y = 0;
 
 		const userPlayer = new Player();
 		userPlayer.load(this.container);

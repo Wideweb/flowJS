@@ -53,7 +53,7 @@ export default class FormationManager {
             location.position.sub(this.driftOffset.position);
             location.orientation -= this.driftOffset.orientation;
 
-            this.slotAssignments[i].character.setTarget(location.position);
+            this.slotAssignments[i].character.setFormationTarget(location.position);
         }
     }
 }
