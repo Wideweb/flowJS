@@ -13,12 +13,12 @@ export default class CirclePattern implements IFormationPattern {
 	getDriftOffset(assignments: Array<SlotAssignment>): Static {
 		const center = new Static();
 		for (let i = 0; i < assignments.length; i++) {
-			const location = this.getSlotLocation(i);
-			center.position.add(location.position);
+			const location = assignments[i].character.location;
+			center.position = center.position.add(location.position);
 			center.orientation += location.orientation;
 		}
 
-		center.position.div(assignments.length);
+		center.position = center.position.div(assignments.length);
 		center.orientation /= assignments.length;
 		return center;
 	}

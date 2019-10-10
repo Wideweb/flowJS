@@ -1,8 +1,9 @@
 import GameObject from '../../game-object';
 import Character from '../character';
 import SteeringOutput from './steering-output';
+import ISteereing from './steering';
 
-export default class Arrive {
+export default class Arrive implements ISteereing {
 
 	target: GameObject;
 	maxAcceleration: number = 0.1;
@@ -12,16 +13,21 @@ export default class Arrive {
 	timeToTarget: number = 0.1;
 
 	constructor(
-		private character: Character
+		protected character: Character
 	) { }
 
 	getSteering(target: GameObject) {
+		if (!target) {
+			return null;
+		}
+
 		const steering = new SteeringOutput()
 
 		const direction = target.position.sub(this.character.position);
 		const distance = direction.length();
 
 		if (distance < this.targetRadius) {
+			this.character.target = null;
 			return null;
 		}
 

@@ -48,10 +48,12 @@ export default class FormationManager {
             const relativeLocation = this.pattern.getSlotLocation(i);
             const location = new Static();
             location.position = relativeLocation.position;
-            location.orientation = relativeLocation.orientation;
+			location.orientation = relativeLocation.orientation;
+			
+			this.driftOffset = this.pattern.getDriftOffset(this.slotAssignments);
 
-            location.position.sub(this.driftOffset.position);
-            location.orientation -= this.driftOffset.orientation;
+            location.position = location.position.add(this.driftOffset.position);
+			location.orientation -= this.driftOffset.orientation;
 
             this.slotAssignments[i].character.setFormationTarget(location.position);
         }

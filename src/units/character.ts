@@ -5,16 +5,18 @@ import Vector2D from '../mathematics/vector';
 import Formulas from '../utils/formulas';
 import Arrive from './movement/arrive';
 import GameObject from '../game-object';
+import PrioritySteering from './movement/priority-steering';
+import Formation from './movement/formation';
 
 export default class Character {
 
 	private graphics: Graphics;
 	private container: Container;
-	private location: Static;
-	private movement: Arrive;
-	private target: GameObject;
-	private formationTarget: Vector2D;
+	public location: Static;
+	private movement: PrioritySteering;
 
+	public target: GameObject;
+	public formationTarget: Vector2D;
 	public velocity: Vector2D;
 
 	get position() {
@@ -42,7 +44,11 @@ export default class Character {
 		this.container = new Container();
 		this.location = new Static();
 		this.velocity = new Vector2D(1, 1);
-		this.movement = new Arrive(this);
+		
+		this.movement = new PrioritySteering();
+		this.movement.add(new Arrive(this));
+		this.movement.add(new Formation(this));
+
 		this.location.position.x = Formulas.getRandomArbitrary(-300, 300);
 		this.location.position.y = Formulas.getRandomArbitrary(-300, 300);
 		this.container.addChild(this.graphics);
@@ -57,12 +63,7 @@ export default class Character {
 	update(gameTime: IAppTime): void {
 		this.draw();
 
-		let point = this.formationTarget;
-		if (this.target !== undefined) {
-			point = this.target.position.sub(point);
-		}
-
-		const steering = this.movement.getSteering(new GameObject(point));
+		const steering = this.movement.getSteering(this.target);
 
 		if (steering !== null) {
 			this.velocity.x += steering.linear.x;
