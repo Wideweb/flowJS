@@ -1,19 +1,15 @@
 import GameObject from '../../game-object';
-import Character from '../character';
 import SteeringOutput from './steering-output';
 import ISteereing from './steering';
 
 export default class Arrive implements ISteereing {
 
-	target: GameObject;
-	maxAcceleration: number = 0.1;
-	maxSpeed: number = 1;
-	targetRadius: number = 5;
+	targetRadius: number = 2;
 	slowRadius: number = 10;
 	timeToTarget: number = 0.1;
 
 	constructor(
-		protected character: Character
+		public readonly gameObject: GameObject
 	) { }
 
 	getSteering(target: GameObject) {
@@ -23,17 +19,16 @@ export default class Arrive implements ISteereing {
 
 		const steering = new SteeringOutput()
 
-		const direction = target.position.sub(this.character.position);
+		const direction = target.location.position.sub(this.gameObject.location.position);
 		const distance = direction.length();
 
 		if (distance < this.targetRadius) {
-			this.character.target = null;
 			return null;
 		}
 
-		let targetSpeed = this.maxSpeed;
+		let targetSpeed = this.gameObject.maxSpeed;
 		if (distance < this.slowRadius) {
-			targetSpeed = this.maxSpeed * distance / this.slowRadius;
+			targetSpeed = this.gameObject.maxSpeed * distance / this.slowRadius;
 		}
 
 		let targetVelocity = direction
@@ -42,13 +37,13 @@ export default class Arrive implements ISteereing {
 
 		//Acceleration tries to get to the target velocity
 		steering.linear = targetVelocity
-			.sub(this.character.velocity)
+			.sub(this.gameObject.velocity)
 			.div(this.timeToTarget);
 
-		if (steering.linear.length() > this.maxAcceleration) {
+		if (steering.linear.length() > this.gameObject.maxAcceleration) {
 			steering.linear = steering.linear
 				.normalize()
-				.mul(this.maxAcceleration);
+				.mul(this.gameObject.maxAcceleration);
 		}
 
 		steering.angular = 0;

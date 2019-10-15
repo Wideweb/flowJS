@@ -2,9 +2,12 @@ import ScreenManager from "../screen-manager";
 import InputManager from "../input-manager";
 import { IAppTime } from "../app";
 import { Container } from 'pixi.js';
+import Menu from '../menu/menu';
 
 export default abstract class BaseScreen {
 
+    public menu: Menu;
+    
 	protected container: Container;
 
 	constructor(

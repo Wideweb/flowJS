@@ -1,24 +1,25 @@
 import IFormationPattern from "./base/formation-pattern";
 import SlotAssignment from "./base/slot-assignment";
-import Static from "../mathematics/static";
 import Character from "../units/character";
+import Vector2D from '../mathematics/vector';
+import GameObject from '../game-object';
 
 export default class FormationManager {
 
     private slotAssignments: Array<SlotAssignment> = [];
     private pattern: IFormationPattern;
-    private driftOffset: Static;
 
     setPattern(pattern: IFormationPattern) {
         this.pattern = pattern;
+        const characters = this.slotAssignments.map(s => s.character);
+        this.slotAssignments = [];
+        characters.forEach(c => this.addCharacter(c));
     }
 
     updateSlotAssignments(): void {
         for (let i = 0; i < this.slotAssignments.length; i++) {
             this.slotAssignments[i].slotNumber = i;
         }
-
-        this.driftOffset = this.pattern.getDriftOffset(this.slotAssignments);
     }
 
     addCharacter(character: Character): boolean {
@@ -43,19 +44,17 @@ export default class FormationManager {
         this.updateSlotAssignments();
     }
 
-    updateSlots(): void {
+    updateSlots(center: Vector2D): boolean {
+        let aligned = true;
         for (let i = 0; i < this.slotAssignments.length; i++) {
+            const character = this.slotAssignments[i].character;
             const relativeLocation = this.pattern.getSlotLocation(i);
-            const location = new Static();
-            location.position = relativeLocation.position;
-			location.orientation = relativeLocation.orientation;
-			
-			this.driftOffset = this.pattern.getDriftOffset(this.slotAssignments);
-
-            location.position = location.position.add(this.driftOffset.position);
-			location.orientation -= this.driftOffset.orientation;
-
-            this.slotAssignments[i].character.setFormationTarget(location.position);
+            const targetPoint = center.add(relativeLocation.position);
+            const target = GameObject.createFromPoint(targetPoint);
+            character.setTarget(target);
+            aligned = aligned && character.location.position.sub(targetPoint).length() < 10;
         }
+
+        return aligned;
     }
 }

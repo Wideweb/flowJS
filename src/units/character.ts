@@ -5,27 +5,15 @@ import Vector2D from '../mathematics/vector';
 import Formulas from '../utils/formulas';
 import Arrive from './movement/arrive';
 import GameObject from '../game-object';
-import PrioritySteering from './movement/priority-steering';
-import Formation from './movement/formation';
+import ISteereing from './movement/steering';
 
-export default class Character {
+export default class Character extends GameObject {
 
-	private graphics: Graphics;
-	private container: Container;
-	public location: Static;
-	private movement: PrioritySteering;
+	protected graphics: Graphics;
+	protected container: Container;
+	protected movement: ISteereing;
 
 	public target: GameObject;
-	public formationTarget: Vector2D;
-	public velocity: Vector2D;
-
-	get position() {
-		return this.location.position;
-	}
-
-	setFormationTarget(target: Vector2D) {
-		this.formationTarget = target;
-	}
 
 	setTarget(target: GameObject) {
 		this.target = target;
@@ -45,12 +33,10 @@ export default class Character {
 		this.location = new Static();
 		this.velocity = new Vector2D(1, 1);
 		
-		this.movement = new PrioritySteering();
-		this.movement.add(new Arrive(this));
-		this.movement.add(new Formation(this));
+		this.movement = new Arrive(this);
 
-		this.location.position.x = Formulas.getRandomArbitrary(-300, 300);
-		this.location.position.y = Formulas.getRandomArbitrary(-300, 300);
+		this.location.position.x = Formulas.getRandomArbitrary(150, 450);
+		this.location.position.y = Formulas.getRandomArbitrary(150, 450);
 		this.container.addChild(this.graphics);
 		parent.addChild(this.container);
 	}

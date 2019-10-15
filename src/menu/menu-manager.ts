@@ -9,7 +9,7 @@ import MenuItem from './menu-item';
 
 export default class MenuManager {
 
-	private menu: Menu;
+	public menu: Menu;
 	private container: Container;
 	private unload$: Subject<Boolean>;
 

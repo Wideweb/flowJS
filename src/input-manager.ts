@@ -22,7 +22,7 @@ export default class InputManager {
 
 		this.on$ = merge(
 			fromEvent(App.instance.stage, POINTER_DOWN_EVENT),
-			fromEvent(App.instance.stage, POINTER_MOVE_EVENT)
+			fromEvent(App.instance.stage, POINTER_MOVE_EVENT),
 		).pipe(
 			map((event: any) => {
 				this.innerPointer.x = event.data.global.x;
