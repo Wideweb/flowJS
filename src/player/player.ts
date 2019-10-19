@@ -28,7 +28,7 @@ export default class Player extends GameObject {
         this.location.position = new Vector2D(300, 300);
         this.target.location.position = new Vector2D(300, 300);
         this.formationManager.setPattern(new LinePattern());
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 1; i++) {
             const character = new Character();
             character.load(parent);
             this.characters.push(character);

@@ -6,12 +6,14 @@ import Formulas from '../utils/formulas';
 import Arrive from './movement/arrive';
 import GameObject from '../game-object';
 import ISteereing from './movement/steering';
+import StateMachine from './state/state-machine';
 
 export default class Character extends GameObject {
 
 	protected graphics: Graphics;
 	protected container: Container;
 	protected movement: ISteereing;
+	protected state: StateMachine;
 
 	public target: GameObject;
 
@@ -23,7 +25,7 @@ export default class Character extends GameObject {
 		this.graphics.clear();
 		this.graphics.lineStyle(0);
 		this.graphics.beginFill(0xDE3249, 1);
-		this.graphics.drawCircle(0, 0, 10);
+		this.graphics.drawRect(-5, -5, 10, 10);
 		this.graphics.endFill();
 	}
 
@@ -32,8 +34,9 @@ export default class Character extends GameObject {
 		this.container = new Container();
 		this.location = new Static();
 		this.velocity = new Vector2D(1, 1);
-		
+
 		this.movement = new Arrive(this);
+		this.state = new StateMachine(this);
 
 		this.location.position.x = Formulas.getRandomArbitrary(150, 450);
 		this.location.position.y = Formulas.getRandomArbitrary(150, 450);
@@ -57,10 +60,15 @@ export default class Character extends GameObject {
 
 			this.location.position.x += this.velocity.x;
 			this.location.position.y += this.velocity.y;
+		} else {
+			this.velocity.x = 0;
+			this.velocity.y = 0;
 		}
 
 		this.container.x = this.location.position.x;
 		this.container.y = this.location.position.y;
-		this.container.rotation = this.location.orientation;
+		this.container.rotation = Math.atan2(this.velocity.y, this.velocity.x);
+
+		this.state.update().forEach(a => console.log(a.type));
 	}
 }

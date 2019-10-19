@@ -6,13 +6,13 @@ export default class Arrive implements ISteereing {
 
 	targetRadius: number = 2;
 	slowRadius: number = 10;
-	timeToTarget: number = 0.1;
+	timeToTarget: number = 1;
 
 	constructor(
 		public readonly gameObject: GameObject
 	) { }
 
-	getSteering(target: GameObject) {
+	getSteering(target: GameObject): SteeringOutput {
 		if (!target) {
 			return null;
 		}

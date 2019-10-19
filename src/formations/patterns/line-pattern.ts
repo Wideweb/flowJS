@@ -25,10 +25,11 @@ export default class LinePattern implements IFormationPattern {
 
 	getSlotLocation(slotNumber: number): Static {
         const offset = this.characterRadius * this.numberOfSlots;
-
+		const dist = this.characterRadius * 2 * slotNumber - offset;
+		
 		const location = new Static();
-		location.position.x = 0;
-        location.position.y = this.characterRadius * 2 * slotNumber - offset;
+		location.position.x = Math.cos(30 * Math.PI / 180) * dist;
+        location.position.y = Math.sin(30 * Math.PI / 180) * dist;
         
 		return location;
 	}
