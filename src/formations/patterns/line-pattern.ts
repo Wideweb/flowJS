@@ -28,8 +28,8 @@ export default class LinePattern implements IFormationPattern {
 		const dist = this.characterRadius * 2 * slotNumber - offset;
 		
 		const location = new Static();
-		location.position.x = Math.cos(30 * Math.PI / 180) * dist;
-        location.position.y = Math.sin(30 * Math.PI / 180) * dist;
+		location.position.x = Math.cos(90 * Math.PI / 180) * dist;
+        location.position.y = Math.sin(90 * Math.PI / 180) * dist;
         
 		return location;
 	}

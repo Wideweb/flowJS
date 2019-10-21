@@ -69,6 +69,6 @@ export default class Character extends GameObject {
 		this.container.y = this.location.position.y;
 		this.container.rotation = Math.atan2(this.velocity.y, this.velocity.x);
 
-		this.state.update().forEach(a => console.log(a.type));
+		this.state.update();
 	}
 }

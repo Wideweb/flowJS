@@ -2,6 +2,14 @@ import Character from '../character';
 import { NotCondition } from './conditions/not.condition';
 import HasVelocityCondition from './conditions/has-velocity.condition';
 
+export enum ActionType {
+    Stop = 1,
+    Move,
+    Ready,
+    Steady,
+    SlowDown,
+}
+
 export class State {
 	constructor(
 		public action: Action,
@@ -15,7 +23,7 @@ export interface ICondition {
 
 export class Action {
 	constructor(
-		public type: string,
+		public type: ActionType,
 		public payload?: any,
 	) { }
 }
@@ -47,14 +55,14 @@ export default class StateMachine {
 	constructor(
 		private character: Character,
 	) {
-		const stop = new State(new Action('STOP'), []);
-		const move = new State(new Action('MOVE'), []);
+		const stop = new State(new Action(ActionType.Stop), []);
+		const move = new State(new Action(ActionType.Move), []);
 
 		stop.transitions.push(
 			new Transition(
 				[
-					new Action('READY'),
-					new Action('STEADY'),
+					new Action(ActionType.Ready),
+					new Action(ActionType.Steady),
 				],
 				move,
 				new HasVelocityCondition(),
@@ -64,7 +72,7 @@ export default class StateMachine {
 		move.transitions.push(
 			new Transition(
 				[
-					new Action('SLOW_DOWN'),
+					new Action(ActionType.SlowDown),
 				],
 				stop,
 				new NotCondition(new HasVelocityCondition()),

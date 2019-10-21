@@ -28,7 +28,7 @@ export default class Player extends GameObject {
         this.location.position = new Vector2D(300, 300);
         this.target.location.position = new Vector2D(300, 300);
         this.formationManager.setPattern(new LinePattern());
-        for (let i = 0; i < 1; i++) {
+        for (let i = 0; i < 12; i++) {
             const character = new Character();
             character.load(parent);
             this.characters.push(character);
@@ -46,7 +46,7 @@ export default class Player extends GameObject {
     }
 
     update(gameTime: IAppTime): void {
-        const aligned = this.formationManager.updateSlots(this.location.position);
+        const aligned = this.formationManager.updateSlots(this.location);
 
         if (aligned) {
             const steering = this.movement.getSteering(this.target);
@@ -57,6 +57,7 @@ export default class Player extends GameObject {
 
                 this.location.position.x += this.velocity.x;
                 this.location.position.y += this.velocity.y;
+                this.location.orientation = Math.atan2(this.velocity.y, this.velocity.x);
             }
         }
 
