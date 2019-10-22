@@ -5,8 +5,8 @@ export default class GameObject {
     constructor(
         public location: Static = new Static(),
         public velocity: Vector2D = new Vector2D(),
-        public maxAcceleration: number = 0.2,
-        public maxSpeed: number = 2,
+        public maxAcceleration: number = 0.4,
+        public maxSpeed: number = 4,
     ) { }
 
     static createFromPoint(point: Vector2D): GameObject {

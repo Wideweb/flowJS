@@ -49,7 +49,7 @@ export default class FormationManager {
         for (let i = 0; i < this.slotAssignments.length; i++) {
             const character = this.slotAssignments[i].character;
             const relativeLocation = this.pattern.getSlotLocation(i);
-            const targetPoint = center.position.add(relativeLocation.position.rotate(center.orientation));
+            const targetPoint = center.position.add(relativeLocation.position.rotate(-center.orientation));
             const target = GameObject.createFromPoint(targetPoint);
             character.setTarget(target);
             aligned = aligned && character.location.position.sub(targetPoint).length() < 10;

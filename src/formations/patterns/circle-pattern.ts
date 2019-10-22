@@ -4,7 +4,7 @@ import SlotAssignment from "../base/slot-assignment";
 
 export default class CirclePattern implements IFormationPattern {
 	private numberOfSlots: number;
-	private characterRadius: number = 10;
+	private characterRadius: number = 30;
 
 	setSlotsNumber(number: number): void {
 		this.numberOfSlots = number;

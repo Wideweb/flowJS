@@ -5,7 +5,7 @@ import Vector2D from '../../mathematics/vector';
 
 export default class NLinePattern implements IFormationPattern {
     private numberOfSlots: number;
-    private characterRadius: number = 10;
+    private characterRadius: number = 30;
     private center: Vector2D;
 
     setSlotsNumber(number: number): void {

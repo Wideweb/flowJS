@@ -1,6 +1,6 @@
 import Static from '../mathematics/static';
-import { IAppTime } from '../app';
-import { Graphics, Container } from 'pixi.js';
+import App, { IAppTime } from '../app';
+import { Container, Sprite, Rectangle, Texture } from 'pixi.js';
 import Vector2D from '../mathematics/vector';
 import Formulas from '../utils/formulas';
 import Arrive from './movement/arrive';
@@ -10,10 +10,16 @@ import StateMachine from './state/state-machine';
 
 export default class Character extends GameObject {
 
-	protected graphics: Graphics;
 	protected container: Container;
 	protected movement: ISteereing;
 	protected state: StateMachine;
+	protected texture: Texture;
+	protected sprite: Sprite;
+	protected frames: Rectangle[];
+
+	frameElapsed: number = 0;
+	frameDuratiom: number = 40;
+	frameNumber: number = 0;
 
 	public target: GameObject;
 
@@ -21,16 +27,7 @@ export default class Character extends GameObject {
 		this.target = target;
 	}
 
-	draw() {
-		this.graphics.clear();
-		this.graphics.lineStyle(0);
-		this.graphics.beginFill(0xDE3249, 1);
-		this.graphics.drawRect(-5, -5, 10, 10);
-		this.graphics.endFill();
-	}
-
 	load(parent: any): void {
-		this.graphics = new Graphics();
 		this.container = new Container();
 		this.location = new Static();
 		this.velocity = new Vector2D(1, 1);
@@ -40,18 +37,30 @@ export default class Character extends GameObject {
 
 		this.location.position.x = Formulas.getRandomArbitrary(150, 450);
 		this.location.position.y = Formulas.getRandomArbitrary(150, 450);
-		this.container.addChild(this.graphics);
+
+		this.texture = App._instance.loader.resources['fly'].texture;
+
+		this.frames = [
+			new Rectangle(0, 75 * 0, 75, 75),
+			new Rectangle(0, 75 * 1, 75, 75),
+		];
+
+		this.texture.frame = this.frames[0];
+		this.sprite = new Sprite(this.texture);
+		this.sprite.anchor.set(0.5);
+		this.sprite.rotation = 90 * Math.PI / 180;
+		this.sprite.scale.set(0.75);
+		this.container.addChild(this.sprite);
+
 		parent.addChild(this.container);
 	}
 
 	unload(parent: any): void {
 		parent.removeChild(this.container);
-		this.container.removeChild(this.graphics);
+		this.container.removeChild(this.sprite);
 	}
 
 	update(gameTime: IAppTime): void {
-		this.draw();
-
 		const steering = this.movement.getSteering(this.target);
 
 		if (steering !== null) {
@@ -70,5 +79,20 @@ export default class Character extends GameObject {
 		this.container.rotation = Math.atan2(this.velocity.y, this.velocity.x);
 
 		this.state.update();
+
+		this.frameElapsed += gameTime.elapsed;
+		if (this.frameElapsed >= this.frameDuratiom) {
+			this.nextFrame();
+			this.frameElapsed = 0;
+		}
+	}
+
+	private nextFrame() {
+		this.frameNumber++;
+		if (this.frameNumber >= this.frames.length) {
+			this.frameNumber = 0;
+		}
+		
+		this.texture.frame = this.frames[this.frameNumber];
 	}
 }
