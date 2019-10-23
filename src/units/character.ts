@@ -61,7 +61,7 @@ export default class Character extends GameObject {
 		this.container.x = this.location.position.x;
 		this.container.y = this.location.position.y;
 
-        const actions = this.state.update();
+        const actions = this.state.update(gameTime);
         this.animation.setAnimation(actions[actions.length - 1].type);
         this.animation.update(gameTime);
 	}

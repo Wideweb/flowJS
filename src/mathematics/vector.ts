@@ -39,6 +39,6 @@ export default class Vector2D {
     }
 
     angle(): number {
-        return Math.atan2(this.y, this.x);
+        return Math.atan2(-this.y, this.x);
     }
 }

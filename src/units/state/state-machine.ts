@@ -1,6 +1,7 @@
 import Character from '../character';
 import { NotCondition } from './conditions/not.condition';
 import HasVelocityCondition from './conditions/has-velocity.condition';
+import { IAppTime } from '../../app';
 
 export enum ActionType {
     Stop = 1,
@@ -51,6 +52,8 @@ export class Transition {
 export default class StateMachine {
 	private states: State[] = [];
 	private currentState: State;
+	private duration: number = 2000;
+	private elapsed: number = this.duration;
 
 	constructor(
 		private character: Character,
@@ -87,7 +90,13 @@ export default class StateMachine {
 		this.currentState = stop;
 	}
 
-	update(): Action[] {
+	update(gameTime: IAppTime): Action[] {
+		this.elapsed += gameTime.elapsed;
+        if (this.elapsed < this.duration) {
+            return [this.currentState.action];
+        }
+		this.elapsed = 0;
+
 		let triggeredTransition: Transition;
 
 		for (let transition of this.currentState.transitions) {
@@ -99,7 +108,7 @@ export default class StateMachine {
 
 		if (triggeredTransition) {
 			this.currentState = triggeredTransition.getTargetState();
-			return triggeredTransition.getAction();
+			//return triggeredTransition.getAction();
 		}
 
 		return [this.currentState.action];

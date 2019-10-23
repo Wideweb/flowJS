@@ -25,10 +25,12 @@ export default class Player extends GameObject {
 	}
 
 	load(parent: Container): void {
+		this.maxAcceleration = 0.3,
+        this.maxSpeed = 3,
 		this.location.position = new Vector2D(300, 300);
 		this.target.location.position = new Vector2D(300, 300);
 		this.formationManager.setPattern(new LinePattern());
-		for (let i = 0; i < 27; i++) {
+		for (let i = 0; i < 9; i++) {
 			const character = new Character();
 			character.load(parent);
 			this.characters.push(character);
@@ -49,12 +51,12 @@ export default class Player extends GameObject {
 		let aligned = true;
 		const dist = this.target.location.position.sub(this.location.position);
 		const targetAngle = Math.atan2(dist.y, dist.x);
-		if (Math.abs(this.location.orientation - targetAngle) > 0.005) {
+		if (Math.abs(this.location.orientation - targetAngle) > 0.02) {
 			aligned = false;
 			if (this.location.orientation < targetAngle) {
-				this.location.orientation += 0.005;
+				this.location.orientation += 0.02;
 			} else {
-				this.location.orientation -= 0.005;
+				this.location.orientation -= 0.02;
 			}
 		}
 		
