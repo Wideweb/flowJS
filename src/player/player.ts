@@ -14,7 +14,7 @@ export default class Player extends GameObject {
 	characters: Array<Character> = [];
 	formationManager: FormationManager = new FormationManager();
 	target: GameObject = new GameObject();
-	movement: ISteereing;
+    movement: ISteereing;
 
 	setTarget(target: GameObject) {
 		this.target = target;
@@ -28,7 +28,7 @@ export default class Player extends GameObject {
 		this.location.position = new Vector2D(300, 300);
 		this.target.location.position = new Vector2D(300, 300);
 		this.formationManager.setPattern(new LinePattern());
-		for (let i = 0; i < 9; i++) {
+		for (let i = 0; i < 27; i++) {
 			const character = new Character();
 			character.load(parent);
 			this.characters.push(character);
@@ -46,20 +46,19 @@ export default class Player extends GameObject {
 	}
 
 	update(gameTime: IAppTime): void {
-		/*
 		let aligned = true;
 		const dist = this.target.location.position.sub(this.location.position);
 		const targetAngle = Math.atan2(dist.y, dist.x);
-		if (Math.abs(this.location.orientation - targetAngle) > 0.02) {
+		if (Math.abs(this.location.orientation - targetAngle) > 0.005) {
 			aligned = false;
 			if (this.location.orientation < targetAngle) {
-				this.location.orientation += 0.02;
+				this.location.orientation += 0.005;
 			} else {
-				this.location.orientation -= 0.02;
+				this.location.orientation -= 0.005;
 			}
 		}
-		*/
-		const aligned = this.formationManager.updateSlots(this.location);
+		
+		aligned = this.formationManager.updateSlots(this.location) && aligned;
 
 		if (aligned) {
 			const steering = this.movement.getSteering(this.target);
@@ -70,7 +69,6 @@ export default class Player extends GameObject {
 
 				this.location.position.x += this.velocity.x;
 				this.location.position.y += this.velocity.y;
-				this.location.orientation = Math.atan2(this.velocity.y, this.velocity.x);
 			}
 		}
 

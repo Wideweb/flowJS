@@ -37,4 +37,8 @@ export default class Vector2D {
             -1 * Math.sin(angle) * this.x + Math.cos(angle) * this.y,
         );
     }
+
+    angle(): number {
+        return Math.atan2(this.y, this.x);
+    }
 }

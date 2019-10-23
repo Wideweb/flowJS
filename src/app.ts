@@ -23,7 +23,7 @@ export default class App {
 			App._instance.stage.interactive = true;
 			App._instance.renderer.autoResize = true;
 
-			App._instance.loader.add('fly', '/assets/fly.png').load(() => console.log('LOADED'));
+			App._instance.loader.add('human', '/assets/human.png').load(() => console.log('LOADED'));
 
 			ScreenManager.instance.width = App._instance.renderer.width;
 			ScreenManager.instance.height = App._instance.renderer.height;
