@@ -52,7 +52,7 @@ export default class FormationManager {
             const targetPoint = center.position.add(relativeLocation.position.rotate(-center.orientation));
             const target = GameObject.createFromPoint(targetPoint);
             character.setTarget(target);
-            aligned = aligned && character.location.position.sub(targetPoint).length() < 10;
+            aligned = aligned && character.location.position.sub(targetPoint).length() < 5;
         }
 
         return aligned;

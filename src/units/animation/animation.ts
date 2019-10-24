@@ -11,6 +11,8 @@ export default abstract class Animation {
     protected frameNumber: number = 0;
     protected orientation: Orientation = Orientation.Up;
 
+    constructor(protected resource: string) { }
+
     abstract load(parent: any): void;
     abstract getFrame(): Rectangle;
 

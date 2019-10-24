@@ -3,13 +3,13 @@ import { Rectangle, Sprite } from 'pixi.js';
 import App from '../../app';
 import { Orientation } from './orientation';
 
-export default class AttackAnimation extends Animation {
+export default class CastAnimation extends Animation {
 
-    private frameSize: number = 192;
+    private frameSize: number = 64;
 
     load(parent: any): void {
         this.texture = App._instance.loader.resources[this.resource].texture;
-        this.totalFrames = 5;
+        this.totalFrames = 7;
         this.texture.frame = this.getFrame();
         this.sprite = new Sprite(this.texture);
         this.sprite.anchor.set(0.5);
@@ -19,12 +19,11 @@ export default class AttackAnimation extends Animation {
     }
 
     getOffset(): number {
-        const baseOffset = 1344;
         switch (this.orientation) {
-            case Orientation.Up: return this.frameSize * 0 + baseOffset;
-            case Orientation.Left: return this.frameSize * 1 + baseOffset;
-            case Orientation.Down: return this.frameSize * 2 + baseOffset;
-            case Orientation.Right: return this.frameSize * 3 + baseOffset;
+            case Orientation.Up: return this.frameSize * 0;
+            case Orientation.Left: return this.frameSize * 1;
+            case Orientation.Down: return this.frameSize * 2;
+            case Orientation.Right: return this.frameSize * 3;
         }
     }
 

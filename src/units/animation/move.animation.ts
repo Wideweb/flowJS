@@ -8,7 +8,7 @@ export default class MoveAnimation extends Animation {
     private frameSize: number = 64;
 
     load(parent: any): void {
-        this.texture = App._instance.loader.resources['human'].texture;
+        this.texture = App._instance.loader.resources[this.resource].texture;
         this.totalFrames = 8;
         this.texture.frame = this.getFrame();
         this.sprite = new Sprite(this.texture);

@@ -5,7 +5,7 @@ import ISteereing from './steering';
 export default class Arrive implements ISteereing {
 
     targetRadius: number = 2;
-    slowRadius: number = 10;
+    slowRadius: number = 5;
     timeToTarget: number = 1;
 
     constructor(
