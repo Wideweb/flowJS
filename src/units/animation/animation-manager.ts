@@ -34,7 +34,7 @@ export default class AnimationManager {
 
 		this.animationMap = new Map<ActionType, Animation>();
 		this.animationMap.set(ActionType.Move, move);
-		this.animationMap.set(ActionType.Stop, stop);
+		this.animationMap.set(ActionType.Stop, attack);
 		this.animationMap.set(ActionType.Ready, move);
 		this.animationMap.set(ActionType.Steady, move);
 		this.animationMap.set(ActionType.SlowDown, move);
@@ -66,10 +66,10 @@ export default class AnimationManager {
 				orientation = Orientation.Down;
 			}
 			else if (angle >= Math.PI * 3 / 4 && angle < Math.PI * 5 / 4) {
-				orientation = Orientation.Up;
+				orientation = Orientation.Left;
 			}
 			else if (angle >= Math.PI * 5 / 4 && angle < Math.PI * 7 / 4) {
-				orientation = Orientation.Left;
+				orientation = Orientation.Up;
 			}
 			else if (angle >= Math.PI * 7 / 4 || angle < Math.PI * 1 / 4) {
 				orientation = Orientation.Right;

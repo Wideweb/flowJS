@@ -21,8 +21,8 @@ export default class MoveAnimation extends Animation {
     getOffset(): number {
         switch (this.orientation) {
             case Orientation.Up: return this.frameSize * 8;
-            case Orientation.Down: return this.frameSize * 9;
-            case Orientation.Left: return this.frameSize * 10;
+            case Orientation.Left: return this.frameSize * 9;
+            case Orientation.Down: return this.frameSize * 10;
             case Orientation.Right: return this.frameSize * 11;
         }
     }

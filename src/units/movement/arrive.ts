@@ -4,49 +4,48 @@ import ISteereing from './steering';
 
 export default class Arrive implements ISteereing {
 
-	targetRadius: number = 2;
-	slowRadius: number = 10;
-	timeToTarget: number = 1;
+    targetRadius: number = 2;
+    slowRadius: number = 10;
+    timeToTarget: number = 1;
 
-	constructor(
-		public readonly gameObject: GameObject
-	) { }
+    constructor(
+        public readonly gameObject: GameObject
+    ) { }
 
-	getSteering(target: GameObject): SteeringOutput {
-		if (!target) {
-			return null;
-		}
+    getSteering(target: GameObject): SteeringOutput {
+        if (!target) {
+            return null;
+        }
 
-		const steering = new SteeringOutput()
+        const steering = new SteeringOutput()
 
-		const direction = target.location.position.sub(this.gameObject.location.position);
-		const distance = direction.length();
+        const direction = target.location.position.sub(this.gameObject.location.position);
+        const distance = direction.length();
 
-		if (distance < this.targetRadius) {
-			return null;
-		}
+        if (distance < this.targetRadius) {
+            return null;
+        }
 
-		let targetSpeed = this.gameObject.maxSpeed;
-		if (distance < this.slowRadius) {
-			targetSpeed = this.gameObject.maxSpeed * distance / this.slowRadius;
-		}
+        let targetSpeed = this.gameObject.maxSpeed;
+        if (distance < this.slowRadius) {
+            targetSpeed = this.gameObject.maxSpeed * distance / this.slowRadius;
+        }
 
-		let targetVelocity = direction
-			.normalize()
-			.mul(targetSpeed);
+        let targetVelocity = direction
+            .normalize()
+            .mul(targetSpeed);
 
-		//Acceleration tries to get to the target velocity
-		steering.linear = targetVelocity
-			.sub(this.gameObject.velocity)
-			.div(this.timeToTarget);
+        //Acceleration tries to get to the target velocity
+        steering.linear = targetVelocity
+            .sub(this.gameObject.velocity)
+            .div(this.timeToTarget);
 
-		if (steering.linear.length() > this.gameObject.maxAcceleration) {
-			steering.linear = steering.linear
-				.normalize()
-				.mul(this.gameObject.maxAcceleration);
-		}
+        if (steering.linear.length() > this.gameObject.maxAcceleration) {
+            steering.linear = steering.linear
+                .normalize()
+                .mul(this.gameObject.maxAcceleration);
+        }
 
-		steering.angular = 0;
-		return steering;
-	}
+        return steering;
+    }
 }

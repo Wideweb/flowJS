@@ -22,8 +22,8 @@ export default class AttackAnimation extends Animation {
         const baseOffset = 1344;
         switch (this.orientation) {
             case Orientation.Up: return this.frameSize * 0 + baseOffset;
-            case Orientation.Down: return this.frameSize * 1 + baseOffset;
-            case Orientation.Left: return this.frameSize * 2 + baseOffset;
+            case Orientation.Left: return this.frameSize * 1 + baseOffset;
+            case Orientation.Down: return this.frameSize * 2 + baseOffset;
             case Orientation.Right: return this.frameSize * 3 + baseOffset;
         }
     }

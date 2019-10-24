@@ -48,19 +48,7 @@ export default class Player extends GameObject {
 	}
 
 	update(gameTime: IAppTime): void {
-		let aligned = true;
-		const dist = this.target.location.position.sub(this.location.position);
-		const targetAngle = Math.atan2(dist.y, dist.x);
-		if (Math.abs(this.location.orientation - targetAngle) > 0.02) {
-			aligned = false;
-			if (this.location.orientation < targetAngle) {
-				this.location.orientation += 0.02;
-			} else {
-				this.location.orientation -= 0.02;
-			}
-		}
-		
-		aligned = this.formationManager.updateSlots(this.location) && aligned;
+		const aligned = this.formationManager.updateSlots(this.location);
 
 		if (aligned) {
 			const steering = this.movement.getSteering(this.target);

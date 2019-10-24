@@ -52,7 +52,7 @@ export class Transition {
 export default class StateMachine {
 	private states: State[] = [];
 	private currentState: State;
-	private duration: number = 2000;
+	private duration: number = 0;
 	private elapsed: number = this.duration;
 
 	constructor(

@@ -7,7 +7,7 @@ export default abstract class Animation {
     protected texture: Texture;
     protected totalFrames: number = 0;
     protected frameElapsed: number = 0;
-    protected frameDuratiom: number = 100;
+    protected frameDuratiom: number = 50;
     protected frameNumber: number = 0;
     protected orientation: Orientation = Orientation.Up;
 
