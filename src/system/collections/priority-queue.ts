@@ -22,8 +22,11 @@ export default class PriorityQueue<T extends IComparable> {
 
     public dequeue() {
         const element = this.list[0];
-        this.swap(0, --this.list.length);
-        this.down(0);
+        this.list.length--;
+        if (this.list.length > 0) {
+            this.swap(0, this.list.length);
+            this.down(0);
+        }
         return element;
     }
 

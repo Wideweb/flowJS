@@ -1,4 +1,5 @@
 import { Container, Graphics } from 'pixi.js';
+import Vector2D from '../mathematics/vector';
 
 export enum MapCellType {
     Empty = 0,
@@ -13,6 +14,7 @@ export default class MapCell {
         public x: number,
         public y: number,
         public type: MapCellType,
+        public position: Vector2D,
         public width: number,
         public height: number,
     ) { }
@@ -35,7 +37,7 @@ export default class MapCell {
         this.graphics.clear();
         this.graphics.lineStyle(1);
         this.graphics.beginFill(this.type === MapCellType.Empty ? 0x0B6623 : 0x000000, 1);
-        this.graphics.drawRect(this.x, this.y, this.width, this.height);
+        this.graphics.drawRect(this.position.x, this.position.y, this.width, this.height);
         this.graphics.endFill();
     }
 }

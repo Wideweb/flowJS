@@ -3,6 +3,7 @@ import { Container } from 'pixi.js';
 import { GraphConnection, IGraph } from '../pathfinding/graph';
 import IHeuristic from '../pathfinding/heuristic';
 import AStar from '../pathfinding/a-star';
+import Vector2D from '../mathematics/vector';
 
 class Heuristic implements IHeuristic<MapCell> {
 	estimate(from: MapCell, to: MapCell): number {
@@ -34,8 +35,8 @@ export default class GameMap implements IGraph<MapCell> {
 		for (let i = 0; i < this.dy.length; i++) {
 			for (let j = 0; j < this.dx.length; j++) {
 				const x = node.x + this.dx[i];
-				const y = node.y + this.dy[i];
-				const cost = this.dx[i] !== 0 && this.dy[i] !== 0 ? 14 : 10;
+				const y = node.y + this.dy[j];
+				const cost = this.dx[i] !== 0 && this.dy[j] !== 0 ? 14 : 10;
 				if (x >= 0 && y >= 0 && x < this.data[0].length && y < this.data.length) {
 					connections.push(new GraphConnection(node, this.cells[y][x], cost));
 				}
@@ -52,9 +53,10 @@ export default class GameMap implements IGraph<MapCell> {
 			this.cells.push([]);
 			for (let x = 0; x < this.data[0].length; x++) {
 				const cell = new MapCell(
-					x * cellWidth,
-					y * cellHeight,
-					this.data[y][x] as MapCellType,
+					x,
+					y,
+                    this.data[y][x] as MapCellType,
+                    new Vector2D(x * cellWidth, y * cellHeight),
 					cellWidth,
 					cellHeight,
 				);
