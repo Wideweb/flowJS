@@ -1,17 +1,12 @@
-export class GraphNode { }
+export class GraphConnection<T> {
 
-export class GraphConnection {
-    getToNode(): GraphNode {
-        return new GraphNode();
-    }
-
-    getCost(): number {
-        return 1;
-    }
+	constructor(
+		public from: T,
+		public to: T,
+		public cost: number,
+	) { }
 }
 
-export class Graph {
-    getConnections(node: GraphNode): GraphConnection[] {
-        return [];
-    }
+export interface IGraph<T> {
+	getConnections(node: T): GraphConnection<T>[];
 }

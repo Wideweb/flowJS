@@ -1,5 +1,3 @@
-import { GraphNode } from './graph';
-
-export default interface IHeuristic {
-    estimate(from: GraphNode, to: GraphNode): number;
+export default interface IHeuristic<T> {
+    estimate(from: T, to: T): number;
 }
