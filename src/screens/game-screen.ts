@@ -25,7 +25,8 @@ export default class GameScreen extends BaseScreen {
 
         this.map = new GameMap(gameMapConfig, this.width, this.height);
         this.map.load(this.container);
-        this.map.getPath(this.map.cells[1][1], this.map.cells[5][5]);
+        const path = this.map.getPath(this.map.cells[1][1], this.map.cells[6][9]);
+        this.map.drawPath(path);
 
         this.menuManager = new MenuManager('game-bar', this.height, this.width, this.screenManager);
         this.menuManager.load(parent);

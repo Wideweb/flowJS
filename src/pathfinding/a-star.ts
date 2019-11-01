@@ -1,36 +1,37 @@
 import IComparable from '../system/comparable';
 import IHeuristic from './heuristic';
-import { IGraph, GraphConnection } from './graph';
+import { IGraph } from './graph';
 import PriorityQueue from '../system/collections/priority-queue';
+import Guid from '../system/guid';
 
 class NodeRecord<T> implements IComparable {
+    public id = Guid.uuidv4();
 	public node: T;
-	public connection: any;
+	public parent: NodeRecord<T>;
 	public estimatedTotalCost: number;
 	public cost: number = Infinity;
 
 	public compareTo(node: NodeRecord<T>): number {
-		return this.estimatedTotalCost - node.estimatedTotalCost;
+		return node.estimatedTotalCost - this.estimatedTotalCost;
 	}
 }
 
 export default class AStar<T> {
-	getPath(graph: IGraph<T>, start: T, end: T, heuristic: IHeuristic<T>) {
+	getPath(graph: IGraph<T>, start: T, end: T, heuristic: IHeuristic<T>): T[] {
 		const startRecord = new NodeRecord<T>();
 		startRecord.node = start;
-		startRecord.connection = null;
+		startRecord.parent = null;
 		startRecord.cost = 0;
 		startRecord.estimatedTotalCost = heuristic.estimate(start, end);
 
 		const open = new PriorityQueue<NodeRecord<T>>();
 		open.enqueue(startRecord);
-		const closed: NodeRecord<T>[] = [];
-
+		const closed = new Map<string, NodeRecord<T>>();
 		let current: NodeRecord<T>;
 
 		while (open.length() > 0) {
 			current = open.dequeue();
-			if (current.node == end) {
+			if (current.node === end) {
 				break;
 			}
 
@@ -39,7 +40,7 @@ export default class AStar<T> {
 				const endNode = connection.to;
 				const endNodeCost = current.cost + connection.cost;
 
-				if (closed.some(record => record.node === endNode)) {
+				if (closed.has(current.id)) {
 					continue;
 				}
 
@@ -54,27 +55,26 @@ export default class AStar<T> {
 				}
 
 				endNodeRecord.cost = endNodeCost;
-				endNodeRecord.connection = connection;
-				endNodeRecord.estimatedTotalCost = endNodeCost + heuristic.estimate(start, endNodeRecord.node);
+				endNodeRecord.parent = current;
+				endNodeRecord.estimatedTotalCost = endNodeCost + heuristic.estimate(endNode, end);
 
 				if (!isInOpen) {
 					open.enqueue(endNodeRecord);
 				}
 			}
 
-			open.dequeue();
-			closed.splice(closed.indexOf(current), 1);
+			closed.set(current.id, current);
 		}
 
 		if (current.node != end) {
 			return [];
 		}
 
-		const path: GraphConnection<T>[] = [];
+		const path: T[] = [];
 
 		while (current.node != start) {
-			path.push(current.connection);
-			current = current.connection.getFromNode();
+			path.push(current.node);
+			current = current.parent;
 		}
 
 		return path.reverse();
