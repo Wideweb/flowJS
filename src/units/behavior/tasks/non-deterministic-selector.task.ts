@@ -1,11 +1,11 @@
 import Task from './task';
-import Scope from '../scope';
+import Blackboard from '../blackboard';
 
 export default class NonDeterministicSelectorTask extends Task {
-	run(scope: Scope): boolean {
+	run(blackboard: Blackboard): boolean {
 		const shuffled = this.shuffle(this.children); 
 		for (let i = 0; i < shuffled.length; i++) {
-			if (!shuffled[i].run(scope)) {
+			if (!shuffled[i].run(blackboard)) {
 				return false;
 			}
 		}

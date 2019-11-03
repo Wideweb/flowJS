@@ -1,10 +1,10 @@
 import Task from './task';
-import Scope from '../scope';
+import Blackboard from '../blackboard';
 
 export default class SecuenceTask extends Task {
-	run(scope: Scope): boolean {
+	run(blackboard: Blackboard): boolean {
 		for (let i = 0; i < this.children.length; i++) {
-			if (!this.children[i].run(scope)) {
+			if (!this.children[i].run(blackboard)) {
 				return false;
 			}
 		}

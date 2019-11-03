@@ -1,9 +1,9 @@
 import TaskDecorator from './task-decorator';
-import Scope from '../scope';
+import Blackboard from '../blackboard';
 
 export default class UntilFailTaskDecorator extends TaskDecorator {
-	run(scope: Scope): boolean {
-		while (this.child.run(scope)) { }
+	run(blackboard: Blackboard): boolean {
+		while (this.child.run(blackboard)) { }
 		return true;
 	}
 }

@@ -1,8 +1,8 @@
-import Scope from '../scope';
+import Blackboard from '../blackboard';
 
 export default abstract class Task {
 
 	constructor(protected children: Task[]) { }
 
-	abstract run(scope: Scope): boolean;
+	abstract run(blackboard: Blackboard): boolean;
 }

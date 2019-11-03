@@ -1,8 +1,8 @@
 import Task from '../tasks/task';
-import Scope from '../scope';
+import Blackboard from '../blackboard';
 
 export default abstract class TaskDecorator {
 	constructor(protected child: Task) { }
 
-	abstract run(scope: Scope): boolean;
+	abstract run(blackboard: Blackboard): boolean;
 }

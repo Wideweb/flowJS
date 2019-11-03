@@ -1,6 +1,6 @@
 import TaskDecorator from './task-decorator';
 import Task from '../tasks/task';
-import Scope from '../scope';
+import Blackboard from '../blackboard';
 
 export default class UntilFailTaskDecorator extends TaskDecorator {
 
@@ -13,12 +13,12 @@ export default class UntilFailTaskDecorator extends TaskDecorator {
 		super(child);
 	}
 
-	run(scope: Scope) {
+	run(blackboard: Blackboard) {
 		if (this.runSoFar >= this.limit) {
 			return false;
 		}
 
 		this.runSoFar++;
-		return this.child.run(scope);
+		return this.child.run(blackboard);
 	}
 }

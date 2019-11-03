@@ -1,7 +1,7 @@
-export default class Scope {
+export default class Blackboard {
 	constructor(
 		private data: Object,
-		private parent: Scope,
+		private parent: Blackboard,
 	) { }
 
 	get(name: string): any {
