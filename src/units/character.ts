@@ -50,19 +50,9 @@ export default class Character extends GameObject {
     }
 
     update(gameTime: IAppTime): void {
-        const steering = this.movement.getSteering(this.target);
-
-        if (steering !== null) {
-            this.velocity.x += steering.linear.x;
-            this.velocity.y += steering.linear.y;
-
-            this.location.position.x += this.velocity.x;
-            this.location.position.y += this.velocity.y;
-            this.location.orientation = this.velocity.angle();
-        } else {
-            this.velocity.x = 0;
-            this.velocity.y = 0;
-        }
+        this.location.position.x += this.velocity.x;
+        this.location.position.y += this.velocity.y;
+        this.location.orientation = this.velocity.angle();
 
         this.container.x = this.location.position.x;
         this.container.y = this.location.position.y;
@@ -70,5 +60,15 @@ export default class Character extends GameObject {
         const actions = this.state.update(gameTime);
         this.animation.setAnimation(actions[actions.length - 1].type);
         this.animation.update(gameTime);
+    }
+
+    move(vector: Vector2D) {
+        this.velocity.x += vector.x;
+        this.velocity.y += vector.y;
+    }
+
+    stop() {
+        this.velocity.x = 0;
+        this.velocity.y = 0;
     }
 }

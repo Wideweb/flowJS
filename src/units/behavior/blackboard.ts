@@ -4,12 +4,12 @@ export default class Blackboard {
 		private parent: Blackboard,
 	) { }
 
-	get(name: string): any {
+	get<T>(name: string): T {
 		if (this.data[name]) {
-			return this.data[name];
+			return this.data[name] as T;
 		}
 		else if (this.parent) {
-			return this.parent.get(name);
+			return this.parent.get<T>(name);
 		}
 
 		return null;

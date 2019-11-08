@@ -1,26 +1,24 @@
 import Task from './task';
 import Blackboard from '../blackboard';
 import Arrive from '../../movement/arrive';
+import Character from '../../character';
+import GameObject from '../../../game-object';
 
 export default class WalkTask extends Task {
 
 	run(blackboard: Blackboard): boolean {
-		const character = blackboard.get('character');
-		const target = blackboard.get('target');
+		const character = blackboard.get<Character>('character');
+		const target: GameObject = blackboard.get<GameObject>('target');
 		const movement = new Arrive(character);
 
 		const steering = movement.getSteering(target);
 
 		if (steering !== null) {
-            this.character.velocity.x += steering.linear.x;
-            this.velocity.y += steering.linear.y;
-
-            this.location.position.x += this.velocity.x;
-            this.location.position.y += this.velocity.y;
-            this.location.orientation = this.velocity.angle();
+            character.move(steering.linear);
+            return false;
         } else {
-            this.velocity.x = 0;
-            this.velocity.y = 0;
+            character.stop();
+            return true;
         }
 	}
 }
